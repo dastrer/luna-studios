@@ -37,7 +37,8 @@ class Compra extends Model
     {
         return $this->belongsToMany(Producto::class)
             ->withTimestamps()
-            ->withPivot('cantidad', 'precio_compra', 'fecha_vencimiento');
+            // *** CAMBIO REALIZADO AQUÍ: SE ELIMINA 'fecha_vencimiento' ***
+            ->withPivot('cantidad', 'precio_compra');
     }
 
     public function user(): BelongsTo

@@ -92,9 +92,9 @@ class compraController extends Controller
             $arrayProducto_id = $request->get('arrayidproducto');
             $arrayCantidad = $request->get('arraycantidad');
             $arrayPrecioCompra = $request->get('arraypreciocompra');
-            $arrayFechaVencimiento = $request->get('arrayfechavencimiento');
-            //2.Realizar el llenado
+            // La fecha de vencimiento (arrayfechavencimiento) se ELIMINA
 
+            //2.Realizar el llenado
             $siseArray = count($arrayProducto_id);
             $cont = 0;
             while ($cont < $siseArray) {
@@ -102,7 +102,7 @@ class compraController extends Controller
                     $arrayProducto_id[$cont] => [
                         'cantidad' => $arrayCantidad[$cont],
                         'precio_compra' => $arrayPrecioCompra[$cont],
-                        'fecha_vencimiento' => $arrayFechaVencimiento[$cont]
+                        // Eliminamos la referencia a 'fecha_vencimiento'
                     ]
                 ]);
 
@@ -112,7 +112,7 @@ class compraController extends Controller
                     $arrayProducto_id[$cont],
                     $arrayCantidad[$cont],
                     $arrayPrecioCompra[$cont],
-                    $arrayFechaVencimiento[$cont]
+                    // Eliminamos el argumento $arrayFechaVencimiento[$cont]
                 );
 
                 $cont++;

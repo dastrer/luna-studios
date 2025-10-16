@@ -14,8 +14,9 @@ class Inventario extends Model
 
     protected $table = 'inventario';
 
+    // *** CAMBIO 1: Se elimina el cast para 'fecha_vencimiento' ***
     protected $casts = [
-        'fecha_vencimiento' => 'date',
+        // 'fecha_vencimiento' => 'date', // LÍNEA ELIMINADA
     ];
 
     public function ubicacione(): BelongsTo
@@ -28,8 +29,11 @@ class Inventario extends Model
         return $this->belongsTo(Producto::class);
     }
 
+    // *** CAMBIO 2: Se elimina el método accesor relacionado con la fecha de vencimiento ***
+    /*
     public function getFechaVencimientoFormatAttribute(): string
     {
         return $this->fecha_vencimiento ? $this->fecha_vencimiento->format('d/m/Y') : '';
     }
+    */
 }

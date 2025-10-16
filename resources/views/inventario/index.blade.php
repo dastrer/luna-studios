@@ -40,7 +40,7 @@
                         <th>Producto</th>
                         <th>Stock</th>
                         <th>Ubicación</th>
-                        <th>Fecha de Vencimiento</th>
+                        {{-- CAMBIO: Se elimina el encabezado de "Fecha de Vencimiento" --}}
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -56,9 +56,7 @@
                         <td>
                             {{$item->ubicacione->nombre}}
                         </td>
-                        <td>
-                            {{$item->fecha_vencimiento_format ?? $item->fecha_vencimiento_format}}
-                        </td>
+                        {{-- CAMBIO: Se elimina la columna que mostraba la fecha de vencimiento --}}
                         <td>
 
                         </td>

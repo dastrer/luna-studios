@@ -24,14 +24,12 @@
     <div class="container-lg mt-4">
         <div class="row gy-4">
 
-            <!-----Compra---->
             <div class="col-12">
                 <div class="text-white bg-success p-1 text-center">
                     Datos generales
                 </div>
                 <div class="p-3 border border-3 border-success">
                     <div class="row g-4">
-                        <!--Proveedor-->
                         <div class="col-12">
                             <label for="proveedore_id" class="form-label">
                                 Proveedor:</label>
@@ -49,7 +47,6 @@
                             @enderror
                         </div>
 
-                        <!--Tipo de comprobante-->
                         <div class="col-md-4">
                             <label for="comprobante_id" class="form-label">
                                 Comprobante:</label>
@@ -66,7 +63,6 @@
                             @enderror
                         </div>
 
-                        <!--Numero de comprobante-->
                         <div class="col-md-4">
                             <label for="numero_comprobante" class="form-label">
                                 Numero de comprobante:</label>
@@ -79,7 +75,6 @@
                             @enderror
                         </div>
 
-                        <!--Comprobante Path----->
                         <div class="col-md-4">
                             <label for="file_comprobante" class="form-label">
                                 Archivo:</label>
@@ -93,7 +88,6 @@
                             @enderror
                         </div>
 
-                        <!----Metodo de Pago--->
                         <div class="col-md-6">
                             <label for="metodo_pago" class="form-label">
                                 Método de pago:</label>
@@ -110,7 +104,6 @@
                             @enderror
                         </div>
 
-                        <!--Fecha y hora--->
                         <div class="col-sm-6">
                             <label for="fecha_hora" class="form-label">
                                 Fecha y hora:</label>
@@ -130,14 +123,12 @@
                 </div>
             </div>
 
-            <!------Compra producto---->
             <div class="col-12">
                 <div class="text-white bg-primary p-1 text-center">
                     Detalles de la compra
                 </div>
                 <div class="p-3 border border-3 border-primary">
                     <div class="row g-4">
-                        <!-----Producto---->
                         <div class="col-12">
                             <select id="producto_id"
                                 class="form-control selectpicker"
@@ -150,34 +141,23 @@
                             </select>
                         </div>
 
-                        <!-----Cantidad---->
-                        <div class="col-sm-4">
+                        <div class="col-sm-6">
                             <label for="cantidad" class="form-label">
                                 Cantidad:</label>
                             <input type="number" id="cantidad" class="form-control">
                         </div>
 
-                        <!-----Precio de compra---->
-                        <div class="col-sm-4">
+                        <div class="col-sm-6">
                             <label for="precio_compra" class="form-label">
                                 Precio de compra:</label>
                             <input type="number" id="precio_compra" class="form-control" step="0.1">
                         </div>
 
-                        <!-----Fecha de Vencimiento---->
-                        <div class="col-sm-4">
-                            <label for="fecha_vencimiento" class="form-label">
-                                Fecha de vencimiento:</label>
-                            <input type="date" id="fecha_vencimiento" class="form-control">
-                        </div>
-
-                        <!-----botón para agregar--->
                         <div class="col-12 my-4 text-end">
                             <button id="btn_agregar" class="btn btn-primary" type="button">
                                 Agregar</button>
                         </div>
 
-                        <!-----Tabla para el detalle de la compra--->
                         <div class="col-12">
                             <div class="table-responsive">
                                 <table id="tabla_detalle" class="table table-hover">
@@ -187,7 +167,6 @@
                                             <th class="text-white">Presentación</th>
                                             <th class="text-white">Cantidad</th>
                                             <th class="text-white">Precio</th>
-                                            <th class="text-white">Vencimiento</th>
                                             <th class="text-white">Subtotal</th>
                                             <th></th>
                                         </tr>
@@ -200,12 +179,11 @@
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td></td>
-                                        </tr>
+                                            </tr>
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <th colspan="5">Sumas</th>
+                                            <th colspan="4">Sumas</th>
                                             <th colspan="2">
                                                 <input type="hidden" name="subtotal" value="0" id="inputSubtotal">
                                                 <span id="sumas">0</span>
@@ -213,7 +191,7 @@
                                             </th>
                                         </tr>
                                         <tr>
-                                            <th colspan="5">{{$empresa->abreviatura_impuesto}} %</th>
+                                            <th colspan="4">{{$empresa->abreviatura_impuesto}} %</th>
                                             <th colspan="2">
                                                 <input type="hidden" name="impuesto" value="0" id="inputImpuesto">
                                                 <span id="igv">0</span>
@@ -221,7 +199,7 @@
                                             </th>
                                         </tr>
                                         <tr>
-                                            <th colspan="5">Total</th>
+                                            <th colspan="4">Total</th>
                                             <th colspan="2">
                                                 <input type="hidden" name="total" value="0" id="inputTotal">
                                                 <span id="total">0</span>
@@ -233,7 +211,6 @@
                             </div>
                         </div>
 
-                        <!--Boton para cancelar compra-->
                         <div class="col-12 mt-2">
                             <button id="cancelar"
                                 type="button"
@@ -248,7 +225,6 @@
                 </div>
             </div>
 
-            <!--Botones--->
             <div class="col-12 mt-4 text-center">
                 <button type="submit" class="btn btn-success" id="guardar">
                     Realizar compra</button>
@@ -257,7 +233,6 @@
         </div>
     </div>
 
-    <!-- Modal para cancelar la compra -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -311,10 +286,9 @@
         //Elimar el tbody de la tabla
         $('#tabla_detalle tbody').empty();
 
-        //Añadir una nueva fila a la tabla
+        //Añadir una nueva fila a la tabla (con la nueva estructura de 6 celdas)
         let fila = '<tr>' +
             '<th></th>' +
-            '<td></td>' +
             '<td></td>' +
             '<td></td>' +
             '<td></td>' +
@@ -359,10 +333,10 @@
         let textProducto = $('#producto_id option:selected').text();
         let cantidad = $('#cantidad').val();
         let precioCompra = $('#precio_compra').val();
-        let fechaVencimiento = $('#fecha_vencimiento').val();
+        // SE ELIMINA: let fechaVencimiento = $('#fecha_vencimiento').val();
 
         //Validaciones 
-        //1.Para que los campos no esten vacíos
+        //1.Para que los campos no esten vacíos (la fecha de vencimiento ya no se valida aquí)
         if (textProducto != '' && textProducto != undefined && cantidad != '' && precioCompra != '') {
 
             let nameProducto = textProducto.match(/-\s(.*?)\s-/)[1];
@@ -379,13 +353,12 @@
                     igv = round(sumas / 100 * impuesto);
                     total = round(sumas + igv);
 
-                    //Crear la fila
+                    //Crear la fila - SE ELIMINA la columna de arrayfechavencimiento
                     let fila = '<tr id="fila' + cont + '">' +
                         '<td><input type="hidden" name="arrayidproducto[]" value="' + idProducto + '">' + nameProducto + '</td>' +
                         '<td>' + presentacionProducto + '</td>' +
                         '<td><input type="hidden" name="arraycantidad[]" value="' + cantidad + '">' + cantidad + '</td>' +
                         '<td><input type="hidden" name="arraypreciocompra[]" value="' + precioCompra + '">' + precioCompra + '</td>' +
-                        '<td><input type="hidden" name="arrayfechavencimiento[]" value="' + fechaVencimiento + '">' + fechaVencimiento + '</td>' +
                         '<td>' + subtotal[cont] + '</td>' +
                         '<td><button class="btn btn-danger" type="button" onClick="eliminarProducto(' + cont + ', ' + idProducto + ')"><i class="fa-solid fa-trash"></i></button></td>' +
                         '</tr>';
@@ -418,9 +391,6 @@
         } else {
             showModal('Le faltan campos por llenar');
         }
-
-
-
     }
 
     function eliminarProducto(indice, idProducto) {
@@ -453,7 +423,7 @@
         select.selectpicker('val', '');
         $('#cantidad').val('');
         $('#precio_compra').val('');
-        $('#fecha_vencimiento').val('');
+        // SE ELIMINA la línea de limpieza: $('#fecha_vencimiento').val('');
     }
 
     function round(num, decimales = 2) {

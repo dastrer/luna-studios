@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedInteger('cantidad');
             $table->unsignedInteger('cantidad_minima')->nullable();
             $table->unsignedInteger('cantidad_maxima')->nullable();
-            $table->date('fecha_vencimiento')->nullable();
+            // LÍNEA ELIMINADA: $table->date('fecha_vencimiento')->nullable();
             $table->timestamps();
         });
     }

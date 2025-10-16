@@ -23,7 +23,7 @@ class CreateCompraDetalleEvent
         public $producto_id,
         public $cantidad,
         public $precio_compra,
-        public $fecha_vencimiento
+        // Eliminada: public $fecha_vencimiento
     ) {}
 
     /**
