@@ -14,16 +14,10 @@ class DocumentoSeeder extends Seeder
     {
         Documento::insert([
             [
-                'nombre' => 'DNI',
+                'nombre' => 'CI',
             ],
             [
-                'nombre' => 'Pasaporte',
-            ],
-            [
-                'nombre' => 'RUC',
-            ],
-            [
-                'nombre' => 'Carnet Extranjería',
+                'nombre' => 'NIT',
             ],
         ]);
     }

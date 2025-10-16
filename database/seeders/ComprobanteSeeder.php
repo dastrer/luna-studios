@@ -18,7 +18,7 @@ class ComprobanteSeeder extends Seeder
                 'nombre' => 'Boleta'
             ],
             [
-                'nombre' => 'Factura'
+                'nombre' => 'Recibo'
             ]
         ]);
     }

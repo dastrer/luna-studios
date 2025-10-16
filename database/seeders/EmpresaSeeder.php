@@ -14,12 +14,12 @@ class EmpresaSeeder extends Seeder
     public function run(): void
     {
         Empresa::insert([
-            'nombre' => 'SK SAC',
-            'propietario' => 'Sak Code',
+            'nombre' => 'CALZADOS AGUILAR',
+            'propietario' => 'Lourdes Aguilar',
             'ruc' => '1089674538',
-            'porcentaje_impuesto' => '15',
-            'abreviatura_impuesto' => 'IGV',
-            'direccion' => 'Av. Los Pinos n°789',
+            'porcentaje_impuesto' => '0',
+            'abreviatura_impuesto' => 'IVA',
+            'direccion' => 'Av. Los Pinos n°1064',
             'moneda_id' => 1
         ]);
     }

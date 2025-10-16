@@ -15,9 +15,9 @@ class MonedaSeeder extends Seeder
     {
         Moneda::insert([
             [
-                'estandar_iso' => 'USD',
-                'nombre_completo' => 'Dólar estadounidense',
-                'simbolo' => '$'
+                'estandar_iso' => 'BOB',
+                'nombre_completo' => 'Bolivianos',
+                'simbolo' => 'Bs'
             ],
             [
                 'estandar_iso' => 'EUR',
