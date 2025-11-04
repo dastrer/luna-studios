@@ -14,11 +14,11 @@
 @section('content')
 
 <div class="container-fluid px-4">
-    <h1 class="mt-4 text-center">Kardex</h1>
+    <h1 class="mt-4 text-center">Control de Equipos</h1>
 
     <x-breadcrumb.template>
         <x-breadcrumb.item :href="route('panel')" content="Inicio" />
-        <x-breadcrumb.item active='true' content="Kardex" />
+        <x-breadcrumb.item active='true' content="Control de Equipos" />
     </x-breadcrumb.template>
 
     <div class="mb-3">

@@ -13,7 +13,7 @@
 @section('content')
 
 <div class="container-fluid px-4">
-    <h1 class="mt-4 text-center">Categorías</h1>
+    <h1 class="mt-4 text-center">Paquetes</h1>
 
     <x-breadcrumb.template>
         <x-breadcrumb.item :href="route('panel')" content="Inicio" />

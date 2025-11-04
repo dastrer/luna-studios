@@ -14,12 +14,12 @@ class EmpresaSeeder extends Seeder
     public function run(): void
     {
         Empresa::insert([
-            'nombre' => 'CALZADOS AGUILAR',
-            'propietario' => 'Lourdes Aguilar',
+            'nombre' => 'LUNA STUDIOS',
+            'propietario' => 'Grover Tambo',
             'ruc' => '1089674538',
             'porcentaje_impuesto' => '0',
             'abreviatura_impuesto' => 'IVA',
-            'direccion' => 'Av. Los Pinos n°1064',
+            'direccion' => 'Av. Coperativa n°7104',
             'moneda_id' => 1
         ]);
     }

@@ -36,7 +36,7 @@
 
                 <img id="img-default"
                     class="img-fluid"
-                    src="{{ asset('assets/img/paisaje.png') }}"
+                    src="{{ asset('assets/img/image.png') }}"
                     alt="Imagen por defecto">
 
                 <img src="" alt="Ha cargado un archivo no compatible"

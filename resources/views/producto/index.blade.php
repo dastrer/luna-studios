@@ -13,10 +13,10 @@
 @section('content')
 
 <div class="container-fluid px-4">
-    <h1 class="mt-4 text-center">Productos</h1>
+    <h1 class="mt-4 text-center">Servicios</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
-        <li class="breadcrumb-item active">Productos</li>
+        <li class="breadcrumb-item active">Servicios</li>
     </ol>
 
     @can('crear-producto')
@@ -30,13 +30,13 @@
     <div class="card">
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
-            Tabla productos
+            Tabla servicios
         </div>
         <div class="card-body">
             <table id="datatablesSimple" class="table table-striped fs-6">
                 <thead>
                     <tr>
-                        <th>Producto</th>
+                        <th>Servicio</th>
                         <th>Precio</th>
                         <th>Marca</th>
                         <th>Categoría</th>
@@ -122,7 +122,7 @@
                         <div class="modal-dialog modal-dialog-scrollable">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Detalles del producto</h1>
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Detalles del servicio</h1>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
