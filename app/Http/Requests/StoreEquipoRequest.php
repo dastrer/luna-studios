@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateProductoRequest extends FormRequest
+class StoreEquipoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,16 +21,15 @@ class UpdateProductoRequest extends FormRequest
      */
     public function rules(): array
     {
-        $producto = $this->route('producto');
-        
         return [
-            'codigo' => 'nullable|unique:productos,codigo,'.$producto->id.'|max:50',
-            'nombre' => 'required|unique:productos,nombre,'.$producto->id.'|max:255',
+            'codigo' => 'required|unique:productos,codigo|max:50',
+            'nombre' => 'required|unique:productos,nombre|max:255',
             'descripcion' => 'nullable|max:255',
             'img_path' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
             'marca_id' => 'nullable|integer|exists:marcas,id',
             'presentacione_id' => 'required|integer|exists:presentaciones,id',
-            'categoria_id' => 'nullable|integer|exists:categorias,id'
+            'categoria_id' => 'nullable',
+            'precio' => 'required|numeric|min:0'
         ];
     }
 
@@ -39,14 +38,19 @@ class UpdateProductoRequest extends FormRequest
         return [
             'marca_id' => 'marca',
             'presentacione_id' => 'presentación',
-            'categoria_id' => 'categoria'
+            'categoria_id' => 'categoría',
+            'precio' => 'precio'
         ];
     }
-
+    
     public function messages()
     {
         return [
-            // Mensajes personalizados si los necesitas
+            'codigo.required' => 'El código es obligatorio para equipos',
+            'codigo.unique' => 'Este código ya está en uso',
+            'precio.required' => 'El precio es obligatorio para equipos',
+            'precio.numeric' => 'El precio debe ser un número válido',
+            'precio.min' => 'El precio no puede ser negativo'
         ];
     }
 }

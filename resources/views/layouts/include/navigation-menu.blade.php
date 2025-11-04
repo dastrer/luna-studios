@@ -12,6 +12,12 @@
                 <!-- EQUIPOS E INSUMOS -->
                 <x-nav.heading>Adquisiciones</x-nav.heading>
                 
+                @can('ver-producto')
+                <x-nav.nav-link content='Equipos'
+                    icon='fa-brands fa-shopify'
+                    :href="route('equipos.index')" />
+                @endcan
+                <!-- aqui va ir equipos  -->
                 @can('ver-presentacione')
                 <x-nav.nav-link content='Paquetes'
                     icon='fa-solid fa-box-archive'

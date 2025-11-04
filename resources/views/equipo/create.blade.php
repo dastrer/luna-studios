@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title','Crear Servicio')
+@section('title','Crear Equipo')
 
 @push('css')
 <style>
@@ -18,15 +18,15 @@
 
 @section('content')
 <div class="container-fluid px-4">
-    <h1 class="mt-4 text-center">Crear Servicio</h1>
+    <h1 class="mt-4 text-center">Crear Equipo</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('productos.index')}}">Servicios</a></li>
-        <li class="breadcrumb-item active">Crear servicio</li>
+        <li class="breadcrumb-item"><a href="{{ route('equipos.index')}}">Equipos</a></li>
+        <li class="breadcrumb-item active">Crear equipo</li>
     </ol>
 
     <div class="card">
-        <form action="{{ route('productos.store') }}" method="post" enctype="multipart/form-data" id="servicioForm">
+        <form action="{{ route('equipos.store') }}" method="post" enctype="multipart/form-data" id="equipoForm">
             @csrf
             <div class="card-body text-bg-light">
 
@@ -60,6 +60,15 @@
 
                         <div class="row g-4">
 
+                            <!---Precio---->
+                            <div class="col-12">
+                                <label for="precio" class="form-label">Precio Adquirido:</label>
+                                <input type="number" step="0.01" name="precio" id="precio" class="form-control" value="{{old('precio')}}" required>
+                                @error('precio')
+                                <small class="text-danger">{{'*'.$message}}</small>
+                                @enderror
+                            </div>
+
                             <!---Imagen---->
                             <div class="col-12">
                                 <label for="img_path" class="form-label">Imagen:</label>
@@ -73,28 +82,45 @@
                             <div class="col-12">
                                 <label for="codigo_input" class="form-label">Abreviacion:</label>
                                 <div class="input-group">
-                                    <span class="input-group-text">S</span>
+                                    <span class="input-group-text">E</span>
                                     <input type="text" 
                                            name="codigo_input" 
                                            id="codigo_input" 
                                            class="form-control" 
                                            value="{{ old('codigo_input') }}"
                                            placeholder="001"
-                                           oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                           oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                           required>
                                     <input type="hidden" name="codigo" id="codigo_real">
                                 </div>
-                                <small class="text-muted">Formato: S + números (ej: S001, S123)</small>
+                                <small class="text-muted">Formato: E + números (ej: E001, E123)</small>
                                 @error('codigo')
                                 <small class="text-danger">{{'*'.$message}}</small>
                                 @enderror
                             </div>
 
-                            {{-- Marca oculta --}}
-                            <input type="hidden" name="marca_id" value="">
+                            <!---Marca---->
+                            <div class="col-12">
+                                <label for="marca_id" class="form-label">Marca:</label>
+                                <select data-size="4"
+                                    title="Seleccione una marca"
+                                    data-live-search="true"
+                                    name="marca_id"
+                                    id="marca_id"
+                                    class="form-control selectpicker show-tick">
+                                    <option value="">No tiene marca</option>
+                                    @foreach ($marcas as $item)
+                                    <option value="{{$item->id}}" {{ old('marca_id') == $item->id ? 'selected' : '' }}>{{$item->nombre}}</option>
+                                    @endforeach
+                                </select>
+                                @error('marca_id')
+                                <small class="text-danger">{{'*'.$message}}</small>
+                                @enderror
+                            </div>
 
                             <!---Presentaciones---->
                             <div class="col-12">
-                                <label for="presentacione_id" class="form-label">Presentación:</label>
+                                <label for="presentacione_id" class="form-label">Paquete:</label>
                                 <select data-size="4"
                                     title="Seleccione una presentación"
                                     data-live-search="true"
@@ -112,31 +138,14 @@
                                 @enderror
                             </div>
 
-                            <!---Categorías---->
-                            <div class="col-12">
-                                <label for="categoria_id" class="form-label">Categoría:</label>
-                                <select data-size="4"
-                                    title="Seleccione la categoría"
-                                    data-live-search="true"
-                                    name="categoria_id"
-                                    id="categoria_id"
-                                    class="form-control selectpicker show-tick">
-                                    <option value="">No tiene categoría</option>
-                                    @foreach ($categorias as $item)
-                                    <option value="{{$item->id}}" {{ old('categoria_id') == $item->id ? 'selected' : '' }}>
-                                        {{$item->nombre}}
-                                    </option>
-                                    @endforeach
-                                </select>
-                                @error('categoria_id')
-                                <small class="text-danger">{{'*'.$message}}</small>
-                                @enderror
-                            </div>
+                            {{-- Categoría oculta --}}
+                            <input type="hidden" name="categoria_id" value="">
+
                         </div>
 
                     </div>
                     <div class="col-md-6">
-                        <p>Imagen del servicio:</p>
+                        <p>Imagen del equipo:</p>
 
                         <img id="img-default"
                             class="img-fluid"
@@ -180,34 +189,42 @@
         }
     });
 
-    // Prefijo automático para el código de servicios
+    // Prefijo automático para el código
     document.addEventListener('DOMContentLoaded', function() {
         const codigoInput = document.getElementById('codigo_input');
         const codigoReal = document.getElementById('codigo_real');
-        const form = document.getElementById('servicioForm');
+        const form = document.getElementById('equipoForm');
 
         // Validar que solo se ingresen números
         codigoInput.addEventListener('input', function() {
             this.value = this.value.replace(/[^0-9]/g, '');
             // Actualizar el campo real en tiempo real
             if (this.value) {
-                codigoReal.value = 'S' + this.value;
+                codigoReal.value = 'E' + this.value;
             } else {
                 codigoReal.value = '';
             }
         });
 
-        // Asegurar que se envíe el código con "S" antes del submit
+        // Asegurar que se envíe el código con "E" antes del submit
         form.addEventListener('submit', function(e) {
             const codigoValue = codigoInput.value;
             if (codigoValue) {
-                codigoReal.value = 'S' + codigoValue;
+                codigoReal.value = 'E' + codigoValue;
+            }
+            
+            // Validar que tenga al menos un número
+            if (!codigoValue) {
+                e.preventDefault();
+                alert('Por favor ingrese un código numérico');
+                codigoInput.focus();
+                return false;
             }
         });
 
         // También actualizar cuando la página carga (para edit)
         if (codigoInput.value) {
-            codigoReal.value = 'S' + codigoInput.value;
+            codigoReal.value = 'E' + codigoInput.value;
         }
     });
 </script>

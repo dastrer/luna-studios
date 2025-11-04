@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreProductoRequest;
-use App\Http\Requests\UpdateProductoRequest;
+use App\Http\Requests\StoreEquipoRequest;
+use App\Http\Requests\UpdateEquipoRequest;
 use App\Models\Categoria;
 use App\Models\Marca;
 use App\Models\Presentacione;
@@ -15,7 +15,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
-class ProductoController extends Controller
+class EquipoController extends Controller
 {
     protected $productoService;
 
@@ -27,20 +27,21 @@ class ProductoController extends Controller
         $this->middleware('permission:editar-producto', ['only' => ['edit', 'update']]);
         $this->middleware('permission:eliminar-producto', ['only' => ['destroy']]);
     }
+
     /**
      * Display a listing of the resource.
      */
     public function index(): View
     {
-        $productos = Producto::with([
-            'categoria.caracteristica',
-            'marca.caracteristica',
-            'presentacione.caracteristica'
-        ])
+        $equipos = Producto::with([
+                'categoria.caracteristica',
+                'marca.caracteristica', 
+                'presentacione.caracteristica'
+            ])
             ->latest()
             ->get();
 
-        return view('producto.index', compact('productos'));
+        return view('equipo.index', compact('equipos'));
     }
 
     /**
@@ -63,21 +64,23 @@ class ProductoController extends Controller
             ->where('c.estado', 1)
             ->get();
 
-        return view('producto.create', compact('marcas', 'presentaciones', 'categorias'));
+        return view('equipo.create', compact('marcas', 'presentaciones', 'categorias'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProductoRequest $request): RedirectResponse
+    public function store(StoreEquipoRequest $request): RedirectResponse
     {
         try {
             $this->productoService->crearProducto($request->validated());
-            ActivityLogService::log('Creación de producto', 'Productos', $request->validated());
-            return redirect()->route('productos.index')->with('success', 'Producto registrado');
+            ActivityLogService::log('Creación de equipo', 'Equipos', $request->validated());
+            
+            return redirect()->route('equipos.index')->with('success', 'Equipo registrado');
         } catch (Throwable $e) {
-            Log::error('Error al crear el producto', ['error' => $e->getMessage()]);
-            return redirect()->route('productos.index')->with('error', 'Ups, algo falló');
+            Log::error('Error al crear el equipo', ['error' => $e->getMessage()]);
+            
+            return redirect()->route('equipos.index')->with('error', 'Ups, algo falló');
         }
     }
 
@@ -92,7 +95,7 @@ class ProductoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Producto $producto): View
+    public function edit(Producto $equipo): View
     {
         $marcas = Marca::join('caracteristicas as c', 'marcas.caracteristica_id', '=', 'c.id')
             ->select('marcas.id as id', 'c.nombre as nombre')
@@ -109,21 +112,23 @@ class ProductoController extends Controller
             ->where('c.estado', 1)
             ->get();
 
-        return view('producto.edit', compact('producto', 'marcas', 'presentaciones', 'categorias'));
+        return view('equipo.edit', compact('equipo', 'marcas', 'presentaciones', 'categorias'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProductoRequest $request, Producto $producto): RedirectResponse
+    public function update(UpdateEquipoRequest $request, Producto $equipo): RedirectResponse
     {
         try {
-            $this->productoService->editarProducto($request->validated(), $producto);
-            ActivityLogService::log('Edición de producto', 'Productos', $request->validated());
-            return redirect()->route('productos.index')->with('success', 'Producto editado');
+            $this->productoService->editarProducto($request->validated(), $equipo);
+            ActivityLogService::log('Edición de equipo', 'Equipos', $request->validated());
+            
+            return redirect()->route('equipos.index')->with('success', 'Equipo editado');
         } catch (Throwable $e) {
-            Log::error('Error al editar el producto', ['error' => $e->getMessage()]);
-            return redirect()->route('productos.index')->with('error', 'Ups, algo falló');
+            Log::error('Error al editar el equipo', ['error' => $e->getMessage()]);
+            
+            return redirect()->route('equipos.index')->with('error', 'Ups, algo falló');
         }
     }
 
@@ -132,23 +137,6 @@ class ProductoController extends Controller
      */
     public function destroy(string $id)
     {
-        /*
-        $message = '';
-        $producto = Producto::find($id);
-        if ($producto->estado == 1) {
-            Producto::where('id', $producto->id)
-                ->update([
-                    'estado' => 0
-                ]);
-            $message = 'Producto eliminado';
-        } else {
-            Producto::where('id', $producto->id)
-                ->update([
-                    'estado' => 1
-                ]);
-            $message = 'Producto restaurado';
-        }
-
-        return redirect()->route('productos.index')->with('success', $message);*/
+        //
     }
 }

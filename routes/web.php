@@ -7,6 +7,7 @@ use App\Http\Controllers\clienteController;
 use App\Http\Controllers\compraController;
 use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\EmpresaController;
+use App\Http\Controllers\EquipoController; // Agregado
 use App\Http\Controllers\ExportExcelController;
 use App\Http\Controllers\ExportPDFController;
 use App\Http\Controllers\homeController;
@@ -44,7 +45,21 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
     Route::resource('categorias', categoriaController::class)->except('show');
     Route::resource('presentaciones', presentacioneController::class)->except('show');
     Route::resource('marcas', marcaController::class)->except('show');
+    
+    // RUTAS PARA EQUIPOS - MODIFICADAS para usar EquipoController
+    // RUTAS PARA EQUIPOS
+    Route::get('/equipos', [EquipoController::class, 'index'])->name('equipos.index');
+    Route::get('/equipos/create', [EquipoController::class, 'create'])->name('equipos.create');
+    Route::post('/equipos', [EquipoController::class, 'store'])->name('equipos.store');
+    // En tu archivo de rutas, asegúrate de que estén así:
+    Route::get('/equipos/{equipo}/edit', [EquipoController::class, 'edit'])->name('equipos.edit');
+    Route::put('/equipos/{equipo}', [EquipoController::class, 'update'])->name('equipos.update');
+    // Si necesitas la ruta destroy, descomenta la siguiente línea:
+    // Route::delete('/equipos/{id}', [EquipoController::class, 'destroy'])->name('equipos.destroy');
+    
+    // RUTAS PARA PRODUCTOS/SERVICIOS (mantenidas igual)
     Route::resource('productos', ProductoController::class)->except('show', 'destroy');
+    
     Route::resource('clientes', clienteController::class)->except('show');
     Route::resource('proveedores', proveedorController::class)->except('show');
     Route::resource('compras', compraController::class)->except('edit', 'update', 'destroy');
@@ -78,7 +93,5 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
     Route::get('/logout', [logoutController::class, 'logout'])->name('logout');
 });
 
-
-
 Route::get('/login', [loginController::class, 'index'])->name('login.index');
-Route::post('/login', [loginController::class, 'login'])->name('login.login');
+Route::post('/login', [loginController::class, 'index'])->name('login.login');

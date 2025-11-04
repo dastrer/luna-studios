@@ -26,7 +26,7 @@ class StoreProductoRequest extends FormRequest
             'nombre' => 'required|unique:productos,nombre|max:255',
             'descripcion' => 'nullable|max:255',
             'img_path' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
-            'marca_id' => 'nullable|integer|exists:marcas,id',
+            'marca_id' => 'nullable',
             'presentacione_id' => 'required|integer|exists:presentaciones,id',
             'categoria_id' => 'nullable|integer|exists:categorias,id'
         ];
@@ -44,7 +44,7 @@ class StoreProductoRequest extends FormRequest
     public function messages()
     {
         return [
-           // 'codigo.required' => 'Se necesita un campo código'
+            'codigo.unique' => 'Este código ya está en uso'
         ];
     }
 }
