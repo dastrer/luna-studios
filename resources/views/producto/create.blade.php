@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title','Crear Producto')
+@section('title','Crear Servicio')
 
 @push('css')
 <style>
@@ -14,11 +14,11 @@
 
 @section('content')
 <div class="container-fluid px-4">
-    <h1 class="mt-4 text-center">Crear Producto</h1>
+    <h1 class="mt-4 text-center">Crear Servicio</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('productos.index')}}">Productos</a></li>
-        <li class="breadcrumb-item active">Crear producto</li>
+        <li class="breadcrumb-item"><a href="{{ route('productos.index')}}">Servicios</a></li>
+        <li class="breadcrumb-item active">Crear servicio</li>
     </ol>
 
     <div class="card">
@@ -67,7 +67,7 @@
 
                             <!----Codigo---->
                             <div class="col-12">
-                                <label for="codigo" class="form-label">Código:</label>
+                                <label for="codigo" class="form-label">Abreviacion:</label>
                                 <input type="text" name="codigo" id="codigo" class="form-control" value="{{old('codigo')}}">
                                 @error('codigo')
                                 <small class="text-danger">{{'*'.$message}}</small>
@@ -137,7 +137,7 @@
 
                     </div>
                     <div class="col-md-6">
-                        <p>Imagen del producto:</p>
+                        <p>Imagen del servicio:</p>
 
                         <img id="img-default"
                             class="img-fluid"

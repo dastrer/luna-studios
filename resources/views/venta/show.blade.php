@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title','Ver venta')
+@section('title','Ver entrega')
 
 @push('css')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
@@ -8,11 +8,11 @@
 
 @section('content')
 <div class="container-fluid px-4">
-    <h1 class="mt-4 text-center">Ver Venta</h1>
+    <h1 class="mt-4 text-center">Ver Entrega</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('ventas.index')}}">Ventas</a></li>
-        <li class="breadcrumb-item active">Ver Venta</li>
+        <li class="breadcrumb-item"><a href="{{ route('ventas.index')}}">Entregas</a></li>
+        <li class="breadcrumb-item active">Ver Entrega</li>
     </ol>
 </div>
 
@@ -21,7 +21,7 @@
     <div class="card mb-4">
 
         <div class="card-header">
-            Datos generales de la venta
+            Datos generales de la entrega
         </div>
 
         <div class="card-body">
@@ -44,7 +44,7 @@
     <div class="card mb-2">
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
-            Tabla de detalle de la venta
+            Tabla de detalle de la entrega
         </div>
         <div class="card-body table-responsive">
             <table class="table table-striped">
@@ -53,7 +53,7 @@
                         <th class="text-white">Producto</th>
                         <th class="text-white">Presentación</th>
                         <th class="text-white">Cantidad</th>
-                        <th class="text-white">Precio de venta</th>
+                        <th class="text-white">Precio de entrega</th>
                         <th class="text-white">Subtotal</th>
                     </tr>
                 </thead>

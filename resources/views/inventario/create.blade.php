@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title','Inicializar producto')
+@section('title','Inicializar Equipo')
 
 @push('css')
 @endpush

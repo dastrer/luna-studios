@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title','ventas')
+@section('title','entregas')
 
 @push('css-datatable')
 <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
@@ -17,16 +17,16 @@
 @section('content')
 
 <div class="container-fluid px-4">
-    <h1 class="mt-4 text-center">Ventas</h1>
+    <h1 class="mt-4 text-center">Entregas</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
-        <li class="breadcrumb-item active">Ventas</li>
+        <li class="breadcrumb-item active">Entregas</li>
     </ol>
 
     @can('crear-venta')
     <div class="mb-4">
         <a href="{{route('ventas.create')}}">
-            <button type="button" class="btn btn-primary">Crear venta</button>
+            <button type="button" class="btn btn-primary">Crear entrega</button>
         </a>
          <a href="{{ route('export.excel-ventas-all') }}">
             <button type="button" class="btn btn-success">Exportar en excel</button>
@@ -37,7 +37,7 @@
     <div class="card mb-4">
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
-            Tabla ventas
+            Tabla entregas
         </div>
         <div class="card-body">
             <table id="datatablesSimple" class="table table-striped">

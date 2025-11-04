@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title','Realizar venta')
+@section('title','Realizar entrega')
 
 @push('css')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
@@ -10,11 +10,11 @@
 
 @section('content')
 <div class="container-fluid px-4">
-    <h1 class="mt-4 text-center">Realizar Venta</h1>
+    <h1 class="mt-4 text-center">Realizar Entrega</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('ventas.index')}}">Ventas</a></li>
-        <li class="breadcrumb-item active">Realizar Venta</li>
+        <li class="breadcrumb-item"><a href="{{ route('ventas.index')}}">Entregas</a></li>
+        <li class="breadcrumb-item active">Realizar Entrega</li>
     </ol>
 </div>
 
@@ -87,7 +87,7 @@
             <!------venta producto---->
             <div class="col-12">
                 <div class="text-white bg-primary p-1 text-center">
-                    Detalles de la venta
+                    Detalles de la Entrega
                 </div>
                 <div class="p-3 border border-3 border-primary">
                     <div class="row gy-4">
@@ -215,7 +215,7 @@
                                 class="btn btn-danger"
                                 data-bs-toggle="modal"
                                 data-bs-target="#exampleModal">
-                                Cancelar venta
+                                Cancelar entrega
                             </button>
                         </div>
 
@@ -226,7 +226,7 @@
             <!----Finalizar venta-->
             <div class="col-12">
                 <div class="text-white bg-primary p-1 text-center">
-                    Finalizar venta
+                    Finalizar entrega
                 </div>
 
                 <div class="p-3 border border-3 border-primary">
@@ -251,7 +251,7 @@
                         <!--Botones--->
                         <div class="col-12 text-center">
                             <button type="submit" class="btn btn-success" id="guardar">
-                                Realizar venta</button>
+                                Realizar entrega</button>
                         </div>
                     </div>
                 </div>
@@ -270,7 +270,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    ¿Seguro que quieres cancelar la venta?
+                    ¿Seguro que quieres cancelar la entrega?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>

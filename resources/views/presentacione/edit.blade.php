@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title','Editar presentación')
+@section('title','Editar paquete')
 
 @push('css')
 <style>

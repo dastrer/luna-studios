@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title','Kardex')
+@section('title','C. Equipos')
 
 @push('css-datatable')
 <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
@@ -29,7 +29,7 @@
                 <div class="col-sm-8">
                     <select name="producto_id" id="producto_id"
                         class="form-control selectpicker"
-                        data-live-search='true' data-size='3' title='Busque un producto aquí'>
+                        data-live-search='true' data-size='3' title='Busque un equipo aquí'>
                         @foreach ($productos as $item)
                         <option value="{{$item->id}}" {{$item->id == $producto_id ? 'selected': ''}}>
                             {{$item->nombre_completo}}
