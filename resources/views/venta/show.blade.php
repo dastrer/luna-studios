@@ -30,7 +30,7 @@
             <h6 class="card-subtitle mb-3 text-body-secondary">
                 Cliente: {{$venta->cliente->persona->razon_social}}</h6>
             <h6 class="card-subtitle mb-3 text-body-secondary">
-                Vendedor: {{$venta->user->name}}</h6>
+                Atendido por: {{$venta->user->name}}</h6>
             <h6 class="card-subtitle mb-3 text-body-secondary">
                 Método de pago: {{$venta->metodo_pago}}</h6>
             <h6 class="card-subtitle mb-3 text-body-secondary">
@@ -50,8 +50,7 @@
             <table class="table table-striped">
                 <thead class="bg-primary text-white">
                     <tr class="align-top">
-                        <th class="text-white">Producto</th>
-                        <th class="text-white">Presentación</th>
+                        <th class="text-white">Servicio/Producto Entregado</th>
                         <th class="text-white">Cantidad</th>
                         <th class="text-white">Precio de entrega</th>
                         <th class="text-white">Subtotal</th>
@@ -62,9 +61,6 @@
                     <tr>
                         <td>
                             {{$item->nombre}}
-                        </td>
-                        <td>
-                            {{$item->presentacione->sigla}}
                         </td>
                         <td>
                             {{$item->pivot->cantidad}}
@@ -80,22 +76,10 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th colspan="5"></th>
+                        <th colspan="4"></th>
                     </tr>
                     <tr>
-                        <th colspan="4">Sumas:</th>
-                        <th>
-                            {{$venta->subtotal}} {{$empresa->moneda->simbolo}}
-                        </th>
-                    </tr>
-                    <tr>
-                        <th colspan="4">{{$empresa->abreviatura_impuesto}} ({{$empresa->porcentaje_impuesto}}%):</th>
-                        <th>
-                            {{$venta->impuesto}} {{$empresa->moneda->simbolo}}
-                        </th>
-                    </tr>
-                    <tr>
-                        <th colspan="4">Total:</th>
+                        <th colspan="3">Total:</th>
                         <th>
                             {{$venta->total}} {{$empresa->moneda->simbolo}}
                         </th>

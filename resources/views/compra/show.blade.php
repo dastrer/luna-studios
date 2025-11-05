@@ -49,11 +49,8 @@
                 <thead class="bg-primary">
                     <tr class="align-top">
                         <th class="text-white">Producto</th>
-                        <th class="text-white">Presentación</th>
                         <th class="text-white">Cantidad</th>
                         <th class="text-white">Precio de compra</th>
-                        <th class="text-white">Fecha de vencimiento</th>
-                        <th class="text-white">Subtotal</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -63,40 +60,20 @@
                             {{$item->nombre}}
                         </td>
                         <td>
-                            {{$item->presentacione->sigla}}
-                        </td>
-                        <td>
                             {{$item->pivot->cantidad}}
                         </td>
                         <td>
-                            {{$item->pivot->precio_compra}}
-                        </td>
-                        <td>
-                            {{$item->pivot->fecha_vencimiento}}
-                        </td>
-                        <td class="td-subtotal">
-                            {{($item->pivot->cantidad) * ($item->pivot->precio_compra)}}
+                            {{$item->pivot->precio_compra}} {{$empresa->moneda->simbolo}}
                         </td>
                     </tr>
                     @endforeach
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th colspan="6"></th>
+                        <th colspan="3"></th>
                     </tr>
                     <tr>
-                        <th colspan="5">Sumas:</th>
-                        <th>
-                            <span id="th-suma"></span>
-                            <span>{{$empresa->moneda->simbolo}}</span>
-                        </th>
-                    </tr>
-                    <tr>
-                        <th colspan="5">{{$empresa->abreviatura_impuesto}}:</th>
-                        <th>{{$compra->impuesto}} {{$empresa->moneda->simbolo}}</th>
-                    </tr>
-                    <tr>
-                        <th colspan="5">Total:</th>
+                        <th colspan="2">Total:</th>
                         <th>{{$compra->total}} {{$empresa->moneda->simbolo}}</th>
                     </tr>
                 </tfoot>
@@ -109,20 +86,8 @@
 
 @push('js')
 <script>
-    //Variables
-    let filasSubtotal = document.getElementsByClassName('td-subtotal');
-    let cont = 0;
-
     $(document).ready(function() {
-        calcularValores();
+        // Ya no necesitamos cálculos JavaScript ya que ocultamos el subtotal
     });
-
-    function calcularValores() {
-        for (let i = 0; i < filasSubtotal.length; i++) {
-            cont += parseFloat(filasSubtotal[i].innerHTML);
-        }
-
-        $('#th-suma').html(cont);
-    }
 </script>
 @endpush

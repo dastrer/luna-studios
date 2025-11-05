@@ -132,10 +132,10 @@ class ventaController extends Controller
             DB::commit();
             ActivityLogService::log('Creación de una venta', 'Ventas', $request->validated());
             return redirect()->route('movimientos.index', ['caja_id' => $venta->caja_id])
-                ->with('success', 'Venta registrada');
+                ->with('success', 'Entrega registrada');
         } catch (Throwable $e) {
             DB::rollBack();
-            Log::error('Error al crear la venta', ['error' => $e->getMessage()]);
+            Log::error('Error al crear la entrega', ['error' => $e->getMessage()]);
             return redirect()->route('ventas.index')->with('error', 'Ups, algo falló');
         }
     }

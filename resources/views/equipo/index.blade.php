@@ -19,10 +19,10 @@
 @section('content')
 
 <div class="container-fluid px-4">
-    <h1 class="mt-4 text-center">Equipos</h1>
+    <h1 class="mt-4 text-center">Equipos e Insumos</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
-        <li class="breadcrumb-item active">Equipos</li>
+        <li class="breadcrumb-item active">Equipos e Insumos</li>
     </ol>
 
     @can('crear-producto')
@@ -107,13 +107,13 @@
     <div class="card">
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
-            Tabla equipos
+            Tabla equipos e insumos
         </div>
         <div class="card-body">
             <table id="datatablesSimple" class="table table-striped fs-6">
                 <thead>
                     <tr>
-                        <th>Equipo</th>
+                        <th>Nombre</th>
                         <th>Precio Adquirido (Bs)</th>
                         <th>Marca</th>
                         <th>Estado</th>
@@ -155,7 +155,7 @@
                                     <ul class="dropdown-menu text-bg-light" style="font-size: small;">
                                         <!-----Editar Equipo--->
                                         @can('editar-producto')
-                                        <li><a class="dropdown-item" href="{{ route('equipos.edit',['equipo' => $item]) }}">
+                                        <li><a class="dropdown-item" href="{{ route('equipos.edit',['equipo' => $item, 'redirect_to' => 'equipos']) }}">
                                                 Editar</a>
                                         </li>
                                         @endcan

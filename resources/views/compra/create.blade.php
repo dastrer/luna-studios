@@ -133,10 +133,16 @@
                             <select id="producto_id"
                                 class="form-control selectpicker"
                                 data-live-search="true"
-                                data-size="1"
-                                title="Busque un producto aquí">
+                                data-size="10"
+                                data-live-search-placeholder="Buscar producto..."
+                                title="Busque un insumo aquí">
                                 @foreach ($productos as $item)
-                                <option value="{{$item->id}}">{{$item->nombre_completo}}</option>
+                                <option value="{{$item->id}}" 
+                                    data-codigo="{{ $item->codigo }}"
+                                    data-nombre="{{ $item->nombre }}"
+                                    data-presentacion="{{ $item->presentacion }}">
+                                    {{ $item->codigo }} - {{ $item->nombre }}
+                                </option>
                                 @endforeach
                             </select>
                         </div>
@@ -168,39 +174,18 @@
                                             <th class="text-white">Cantidad</th>
                                             <th class="text-white">Precio</th>
                                             <th class="text-white">Subtotal</th>
-                                            <th></th>
+                                            <th class="text-white">Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <th></th>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            </tr>
+                                        <!-- Los productos se agregarán aquí dinámicamente -->
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <th colspan="4">Sumas</th>
-                                            <th colspan="2">
-                                                <input type="hidden" name="subtotal" value="0" id="inputSubtotal">
-                                                <span id="sumas">0</span>
-                                                <span>{{$empresa->moneda->simbolo}}</span>
-                                            </th>
-                                        </tr>
-                                        <tr>
-                                            <th colspan="4">{{$empresa->abreviatura_impuesto}} %</th>
-                                            <th colspan="2">
-                                                <input type="hidden" name="impuesto" value="0" id="inputImpuesto">
-                                                <span id="igv">0</span>
-                                                <span>{{$empresa->moneda->simbolo}}</span>
-                                            </th>
-                                        </tr>
-                                        <tr>
                                             <th colspan="4">Total</th>
                                             <th colspan="2">
+                                                <input type="hidden" name="subtotal" value="0" id="inputSubtotal">
+                                                <input type="hidden" name="impuesto" value="0" id="inputImpuesto">
                                                 <input type="hidden" name="total" value="0" id="inputTotal">
                                                 <span id="total">0</span>
                                                 <span>{{$empresa->moneda->simbolo}}</span>
@@ -260,6 +245,15 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
 <script>
     $(document).ready(function() {
+        // Inicializar todos los selectpickers
+        $('.selectpicker').selectpicker();
+        
+        $('#producto_id').on('shown.bs.select', function () {
+            var $searchbox = $(this).next().find('.bs-searchbox input');
+            $searchbox.val('E');
+            $searchbox.trigger('input');
+        });
+
         $('#btn_agregar').click(function() {
             agregarProducto();
         });
@@ -274,44 +268,24 @@
     //Variables
     let cont = 0;
     let subtotal = [];
-    let sumas = 0;
-    let igv = 0;
     let total = 0;
     let arrayIdProductos = [];
 
-    //Constantes
-    const impuesto = 0;
-
     function cancelarCompra() {
-        //Elimar el tbody de la tabla
+        // Limpiar completamente el tbody
         $('#tabla_detalle tbody').empty();
-
-        //Añadir una nueva fila a la tabla (con la nueva estructura de 6 celdas)
-        let fila = '<tr>' +
-            '<th></th>' +
-            '<td></td>' +
-            '<td></td>' +
-            '<td></td>' +
-            '<td></td>' +
-            '<td></td>' +
-            '</tr>';
-        $('#tabla_detalle').append(fila);
-
-        //Reiniciar valores de las variables
+        
+        // Reiniciar valores
         cont = 0;
         subtotal = [];
-        sumas = 0;
-        igv = 0;
         total = 0;
         arrayIdProductos = [];
 
-        //Mostrar los campos calculados
-        $('#sumas').html(sumas);
-        $('#igv').html(igv);
-        $('#total').html(total);
-        $('#inputImpuesto').val(igv);
-        $('#inputSubtotal').val(sumas);
-        $('#inputTotal').val(total);
+        // Actualizar display
+        $('#total').html('0');
+        $('#inputSubtotal').val('0');
+        $('#inputImpuesto').val('0');
+        $('#inputTotal').val('0');
 
         limpiarCampos();
         disableButtons();
@@ -328,117 +302,117 @@
     }
 
     function agregarProducto() {
-        //Obtener valores de los campos
+        // Obtener valores
         let idProducto = $('#producto_id').val();
-        let textProducto = $('#producto_id option:selected').text();
+        let selectedOption = $('#producto_id option:selected');
+        let nombreProducto = selectedOption.data('nombre');
+        let presentacionProducto = selectedOption.data('presentacion');
         let cantidad = $('#cantidad').val();
         let precioCompra = $('#precio_compra').val();
-        // SE ELIMINA: let fechaVencimiento = $('#fecha_vencimiento').val();
 
-        //Validaciones 
-        //1.Para que los campos no esten vacíos (la fecha de vencimiento ya no se valida aquí)
-        if (textProducto != '' && textProducto != undefined && cantidad != '' && precioCompra != '') {
+        console.log('Intentando agregar:', {idProducto, nombreProducto, cantidad, precioCompra});
 
-            let nameProducto = textProducto.match(/-\s(.*?)\s-/)[1];
-            let presentacionProducto = textProducto.match(/Presentación:\s(.*)/)[1];
-
-            //2. Para que los valores ingresados sean los correctos
-            if (parseInt(cantidad) > 0 && (cantidad % 1 == 0) && parseFloat(precioCompra) > 0) {
-
-                //3. No permitir el ingreso del mismo producto 
-                if (!arrayIdProductos.includes(idProducto)) {
-                    //Calcular valores
-                    subtotal[cont] = round(cantidad * precioCompra);
-                    sumas = round(sumas + subtotal[cont]);
-                    igv = round(sumas / 100 * impuesto);
-                    total = round(sumas + igv);
-
-                    //Crear la fila - SE ELIMINA la columna de arrayfechavencimiento
-                    let fila = '<tr id="fila' + cont + '">' +
-                        '<td><input type="hidden" name="arrayidproducto[]" value="' + idProducto + '">' + nameProducto + '</td>' +
-                        '<td>' + presentacionProducto + '</td>' +
-                        '<td><input type="hidden" name="arraycantidad[]" value="' + cantidad + '">' + cantidad + '</td>' +
-                        '<td><input type="hidden" name="arraypreciocompra[]" value="' + precioCompra + '">' + precioCompra + '</td>' +
-                        '<td>' + subtotal[cont] + '</td>' +
-                        '<td><button class="btn btn-danger" type="button" onClick="eliminarProducto(' + cont + ', ' + idProducto + ')"><i class="fa-solid fa-trash"></i></button></td>' +
-                        '</tr>';
-
-                    //Acciones después de añadir la fila
-                    $('#tabla_detalle').append(fila);
-                    limpiarCampos();
-                    cont++;
-                    disableButtons();
-
-                    //Mostrar los campos calculados
-                    $('#sumas').html(sumas);
-                    $('#igv').html(igv);
-                    $('#total').html(total);
-                    $('#inputImpuesto').val(igv);
-                    $('#inputSubtotal').val(sumas);
-                    $('#inputTotal').val(total);
-
-                    //Agregar el id del producto al arreglo
-                    arrayIdProductos.push(idProducto);
-
-                } else {
-                    showModal('Ya ha ingresado el producto');
-                }
-
-            } else {
-                showModal('Valores incorrectos');
-            }
-
-        } else {
-            showModal('Le faltan campos por llenar');
+        // Validaciones
+        if (!idProducto || !cantidad || !precioCompra) {
+            showModal('Todos los campos son obligatorios');
+            return;
         }
-    }
 
-    function eliminarProducto(indice, idProducto) {
-        //Calcular valores
-        sumas -= round(subtotal[indice]);
-        igv = round(sumas / 100 * impuesto);
-        total = round(sumas + igv);
+        if (parseInt(cantidad) <= 0 || !Number.isInteger(parseFloat(cantidad))) {
+            showModal('La cantidad debe ser un número entero positivo');
+            return;
+        }
 
-        //Mostrar los campos calculados
-        $('#sumas').html(sumas);
-        $('#igv').html(igv);
-        $('#total').html(total);
-        $('#inputImpuesto').val(igv);
-        $('#inputSubtotal').val(sumas);
-        $('#inputTotal').val(total);
+        if (parseFloat(precioCompra) <= 0) {
+            showModal('El precio debe ser mayor a 0');
+            return;
+        }
 
-        //Eliminar el fila de la tabla
-        $('#fila' + indice).remove();
+        // Verificar producto duplicado
+        if (arrayIdProductos.includes(idProducto.toString())) {
+            showModal('Este producto ya fue agregado');
+            return;
+        }
 
-        //Eliminar el id del arreglo
-        let index = arrayIdProductos.indexOf(idProducto.toString());
-        arrayIdProductos.splice(index, 1);
+        // Calcular subtotal del producto
+        let subtotalProducto = parseFloat(cantidad) * parseFloat(precioCompra);
+        subtotal[cont] = subtotalProducto;
+        total += subtotalProducto;
 
+        console.log('Cálculos:', {subtotalProducto, total});
+
+        // Crear fila
+        let fila = '<tr id="fila' + cont + '">' +
+            '<td>' +
+                '<input type="hidden" name="arrayidproducto[]" value="' + idProducto + '">' +
+                nombreProducto +
+            '</td>' +
+            '<td>' + (presentacionProducto || 'N/A') + '</td>' +
+            '<td>' +
+                '<input type="hidden" name="arraycantidad[]" value="' + cantidad + '">' +
+                cantidad +
+            '</td>' +
+            '<td>' +
+                '<input type="hidden" name="arraypreciocompra[]" value="' + parseFloat(precioCompra).toFixed(2) + '">' +
+                parseFloat(precioCompra).toFixed(2) +
+            '</td>' +
+            '<td>' + subtotalProducto.toFixed(2) + '</td>' +
+            '<td>' +
+                '<button class="btn btn-danger btn-sm" type="button" onclick="eliminarProducto(' + cont + ')">' +
+                    '<i class="fa-solid fa-trash"></i>' +
+                '</button>' +
+            '</td>' +
+            '</tr>';
+
+        // Agregar al tbody
+        $('#tabla_detalle tbody').append(fila);
+        
+        // Actualizar totales
+        $('#total').html(total.toFixed(2));
+        $('#inputSubtotal').val(total.toFixed(2));
+        $('#inputTotal').val(total.toFixed(2));
+
+        // Agregar a arrays de control
+        arrayIdProductos.push(idProducto.toString());
+        cont++;
+
+        limpiarCampos();
         disableButtons();
 
+        console.log('Producto agregado correctamente. Total:', total);
+    }
+
+    function eliminarProducto(indice) {
+        console.log('Eliminando producto índice:', indice);
+        
+        // Obtener subtotal del producto a eliminar
+        let subtotalEliminar = subtotal[indice] || 0;
+        
+        // Actualizar total
+        total -= subtotalEliminar;
+        if (total < 0) total = 0;
+
+        // Eliminar fila visual
+        $('#fila' + indice).remove();
+
+        // Eliminar de arrays (marcar como eliminado en lugar de splice para no desincronizar índices)
+        subtotal[indice] = 0;
+        
+        // Actualizar display
+        $('#total').html(total.toFixed(2));
+        $('#inputSubtotal').val(total.toFixed(2));
+        $('#inputTotal').val(total.toFixed(2));
+
+        disableButtons();
+        
+        console.log('Producto eliminado. Nuevo total:', total);
     }
 
     function limpiarCampos() {
-        let select = $('#producto_id');
-        select.selectpicker('val', '');
+        $('#producto_id').val('').selectpicker('refresh');
         $('#cantidad').val('');
         $('#precio_compra').val('');
-        // SE ELIMINA la línea de limpieza: $('#fecha_vencimiento').val('');
     }
-
-    function round(num, decimales = 2) {
-        var signo = (num >= 0 ? 1 : -1);
-        num = num * signo;
-        if (decimales === 0) //con 0 decimales
-            return signo * Math.round(num);
-        // round(x * 10 ^ decimales)
-        num = num.toString().split('e');
-        num = Math.round(+(num[0] + 'e' + (num[1] ? (+num[1] + decimales) : decimales)));
-        // x * 10 ^ (-decimales)
-        num = num.toString().split('e');
-        return signo * (num[0] + 'e' + (num[1] ? (+num[1] - decimales) : -decimales));
-    }
-    //Fuente: https://es.stackoverflow.com/questions/48958/redondear-a-dos-decimales-cuando-sea-necesario
 
     function showModal(message, icon = 'error') {
         const Toast = Swal.mixin({

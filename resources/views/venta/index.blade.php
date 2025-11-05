@@ -46,7 +46,7 @@
                         <th>Comprobante</th>
                         <th>Cliente</th>
                         <th>Fecha y hora</th>
-                        <th>Vendedor</th>
+                        <th>Atendido por</th>
                         <th>Total</th>
                         <th>Acciones</th>
                     </tr>

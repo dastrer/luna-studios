@@ -36,7 +36,7 @@
             <table id="datatablesSimple" class="table table-striped fs-6">
                 <thead>
                     <tr>
-                        <th>Nombre</th>
+                        <th>Razon Social</th>
                         <th>Dirección</th>
                         <th>Documento</th>
                         <th>Tipo de persona</th>

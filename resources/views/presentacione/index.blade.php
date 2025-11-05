@@ -35,7 +35,6 @@
                 <thead>
                     <tr>
                         <th>Nombre</th>
-                        <th>Sigla</th>
                         <th>Descripción</th>
                         <th>Estado</th>
                         <th>Acciones</th>
@@ -46,9 +45,6 @@
                     <tr>
                         <td>
                             {{$item->caracteristica->nombre}}
-                        </td>
-                        <td>
-                            {{$item->sigla}}
                         </td>
                         <td>
                             {{$item->caracteristica->descripcion}}

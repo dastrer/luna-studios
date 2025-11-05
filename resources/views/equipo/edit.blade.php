@@ -29,6 +29,9 @@
         <form action="{{ route('equipos.update', ['equipo' => $equipo]) }}" method="post" enctype="multipart/form-data" id="equipoForm">
             @method('PUT')
             @csrf
+            <!-- AGREGAR ESTE CAMPO HIDDEN PARA REDIRECCIÓN -->
+            <input type="hidden" name="redirect_to" value="{{ $redirectTo ?? 'equipos' }}">
+            
             <div class="card-body text-bg-light">
 
                 <div class="row g-4">

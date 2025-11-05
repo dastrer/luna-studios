@@ -37,30 +37,30 @@
             <table id="datatablesSimple" class="table-striped fs-6">
                 <thead>
                     <tr>
-                        <th>Producto</th>
-                        <th>Stock</th>
+                        <th>Código</th>
+                        <th>Nombre</th>
+                        <th>Unidades</th>
                         <th>Ubicación</th>
-                        {{-- CAMBIO: Se elimina el encabezado de "Fecha de Vencimiento" --}}
-                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($inventario as $item)
-                    <tr>
-                        <td>
-                            {{$item->producto->nombre_completo}}
-                        </td>
-                        <td>
-                            {{$item->cantidad}}
-                        </td>
-                        <td>
-                            {{$item->ubicacione->nombre}}
-                        </td>
-                        {{-- CAMBIO: Se elimina la columna que mostraba la fecha de vencimiento --}}
-                        <td>
-
-                        </td>
-                    </tr>
+                        @if (strtoupper(substr($item->producto->codigo, 0, 1)) === 'E')
+                        <tr>
+                            <td>
+                                {{$item->producto->codigo}}
+                            </td>
+                            <td>
+                                {{$item->producto->nombre}}
+                            </td>
+                            <td>
+                                {{$item->cantidad}}
+                            </td>
+                            <td>
+                                {{$item->ubicacione->nombre}}
+                            </td>
+                        </tr>
+                        @endif
                     @endforeach
                 </tbody>
             </table>

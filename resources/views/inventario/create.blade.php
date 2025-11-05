@@ -13,12 +13,12 @@
 
 @section('content')
 <div class="container-fluid px-4">
-    <h1 class="mt-4 text-center">Inicializar Producto</h1>
+    <h1 class="mt-4 text-center">Gestionar Adquisiciones y Servicios</h1>
 
     <x-breadcrumb.template>
         <x-breadcrumb.item :href="route('panel')" content="Inicio" />
         <x-breadcrumb.item :href="route('productos.index')" content="Productos" />
-        <x-breadcrumb.item active='true' content="Inicializar producto" />
+        <x-breadcrumb.item active='true' content="G. Adquisiciones y Servicios" />
     </x-breadcrumb.template>
 
     <div class="mb-4">
@@ -33,7 +33,7 @@
     <x-forms.template :action="route('inventario.store')" method='post'>
 
         <x-slot name='header'>
-            <p>Producto: <span class='fw-bold'>{{$producto->nombre_completo}}</span></p>
+            <p>Nombre: <span class='fw-bold'>{{$producto->nombre}}</span></p>
             <p class="text-muted">
                 @if($tipoProducto === 'servicio')
                     <i class="fas fa-info-circle"></i> Servicio - Configure el costo del servicio

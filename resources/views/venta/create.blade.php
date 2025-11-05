@@ -160,45 +160,18 @@
                                             <th class="text-white">Cantidad</th>
                                             <th class="text-white">Precio</th>
                                             <th class="text-white">Subtotal</th>
-                                            <th></th>
+                                            <th class="text-white">Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <th></th>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
+                                        <!-- Los productos se agregarán aquí dinámicamente -->
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <th colspan="4">Sumas</th>
-                                            <th colspan="2">
-                                                <input type="hidden" name="subtotal"
-                                                    value="0"
-                                                    id="inputSubtotal">
-                                                <span id="sumas">0</span>
-                                                <span>{{$empresa->moneda->simbolo}}</span>
-                                            </th>
-                                        </tr>
-                                        <tr>
-                                            <th colspan="4">
-                                                {{$empresa->abreviatura_impuesto}} ({{$empresa->porcentaje_impuesto}})%
-                                            </th>
-                                            <th colspan="2">
-                                                <input type="hidden" name="impuesto"
-                                                    id="inputImpuesto"
-                                                    value="0">
-                                                <span id="igv">0</span>
-                                                <span>{{$empresa->moneda->simbolo}}</span>
-                                            </th>
-                                        </tr>
-                                        <tr>
                                             <th colspan="4">Total</th>
                                             <th colspan="2">
+                                                <input type="hidden" name="subtotal" value="0" id="inputSubtotal">
+                                                <input type="hidden" name="impuesto" value="0" id="inputImpuesto">
                                                 <input type="hidden" name="total" value="0" id="inputTotal">
                                                 <span id="total">0</span>
                                                 <span>{{$empresa->moneda->simbolo}}</span>
@@ -290,7 +263,6 @@
 
         $('#producto_id').change(mostrarValores);
 
-
         $('#btn_agregar').click(function() {
             agregarProducto();
         });
@@ -317,12 +289,10 @@
     //Variables
     let cont = 0;
     let subtotal = [];
-    let sumas = 0;
-    let igv = 0;
     let total = 0;
     let arrayIdProductos = [];
 
-    //Constantes
+    //Constantes (se mantiene para cálculos internos)
     const impuesto = @json($empresa->porcentaje_impuesto);
 
     function mostrarValores() {
@@ -354,11 +324,17 @@
                     //4.No permitir el ingreso del mismo producto 
                     if (!arrayIdProductos.includes(idProducto)) {
 
-                        //Calcular valores
-                        subtotal[cont] = round(cantidad * precioVenta);
-                        sumas = round(sumas + subtotal[cont]);
-                        igv = round(sumas / 100 * impuesto);
-                        total = round(sumas + igv);
+                        //Calcular valores (sin mostrar IVA visualmente)
+                        let subtotalProducto = round(cantidad * precioVenta);
+                        subtotal[cont] = subtotalProducto;
+                        
+                        // Cálculos internos (se mantienen para el backend)
+                        let sumasInternas = 0;
+                        for (let i = 0; i <= cont; i++) {
+                            sumasInternas += subtotal[i] || 0;
+                        }
+                        let igvInterno = round(sumasInternas / 100 * impuesto);
+                        total = round(sumasInternas + igvInterno);
 
                         //Crear la fila
                         let fila = '<tr id="fila' + cont + '">' +
@@ -366,23 +342,21 @@
                             '<td>' + presentacioneProducto + '</td>' +
                             '<td><input type="hidden" name="arraycantidad[]" value="' + cantidad + '">' + cantidad + '</td>' +
                             '<td><input type="hidden" name="arrayprecioventa[]" value="' + precioVenta + '">' + precioVenta + '</td>' +
-                            '<td>' + subtotal[cont] + '</td>' +
+                            '<td>' + subtotalProducto + '</td>' +
                             '<td><button class="btn btn-danger" type="button" onClick="eliminarProducto(' + cont + ',' + idProducto + ')"><i class="fa-solid fa-trash"></i></button></td>' +
                             '</tr>';
 
                         //Acciones después de añadir la fila
-                        $('#tabla_detalle').append(fila);
+                        $('#tabla_detalle tbody').append(fila);
                         limpiarCampos();
                         cont++;
                         disableButtons();
 
-                        //Mostrar los campos calculados
-                        $('#sumas').html(sumas);
-                        $('#igv').html(igv);
+                        //Mostrar solo el total (sin IVA visible)
                         $('#total').html(total);
-                        $('#inputImpuesto').val(igv);
-                        $('#inputTotal').val(total);
-                        $('#inputSubtotal').val(sumas);
+                        $('#inputImpuesto').val(igvInterno); // Mantener para backend
+                        $('#inputTotal').val(total);         // Mantener para backend
+                        $('#inputSubtotal').val(sumasInternas); // Mantener para backend
 
                         //Agregar el id del producto al arreglo
                         arrayIdProductos.push(idProducto);
@@ -405,18 +379,25 @@
     }
 
     function eliminarProducto(indice, idProducto) {
-        //Calcular valores
-        sumas -= round(subtotal[indice]);
-        igv = round(sumas / 100 * impuesto);
-        total = round(sumas + igv);
+        //Calcular valores (sin mostrar IVA visualmente)
+        let subtotalEliminar = subtotal[indice] || 0;
+        
+        // Recalcular totales internos
+        let nuevaSuma = 0;
+        for (let i = 0; i < subtotal.length; i++) {
+            if (i !== indice && subtotal[i] !== undefined) {
+                nuevaSuma += subtotal[i];
+            }
+        }
+        
+        let nuevoIgv = round(nuevaSuma / 100 * impuesto);
+        total = round(nuevaSuma + nuevoIgv);
 
-        //Mostrar los campos calculados
-        $('#sumas').html(sumas);
-        $('#igv').html(igv);
+        //Mostrar solo el total
         $('#total').html(total);
-        $('#inputImpuesto').val(igv);
-        $('#inputTotal').val(total);
-        $('#inputSubtotal').val(sumas);
+        $('#inputImpuesto').val(nuevoIgv);     // Mantener para backend
+        $('#inputTotal').val(total);           // Mantener para backend
+        $('#inputSubtotal').val(nuevaSuma);    // Mantener para backend
 
         //Eliminar el fila de la tabla
         $('#fila' + indice).remove();
@@ -425,6 +406,9 @@
         let index = arrayIdProductos.indexOf(idProducto.toString());
         arrayIdProductos.splice(index, 1);
 
+        // Marcar como eliminado en el array de subtotales
+        delete subtotal[indice];
+
         disableButtons();
     }
 
@@ -432,32 +416,17 @@
         //Elimar el tbody de la tabla
         $('#tabla_detalle tbody').empty();
 
-        //Añadir una nueva fila a la tabla
-        let fila = '<tr>' +
-            '<th></th>' +
-            '<td></td>' +
-            '<td></td>' +
-            '<td></td>' +
-            '<td></td>' +
-            '<td></td>' +
-            '</tr>';
-        $('#tabla_detalle').append(fila);
-
         //Reiniciar valores de las variables
         cont = 0;
         subtotal = [];
-        sumas = 0;
-        igv = 0;
         total = 0;
         arrayIdProductos = [];
 
-        //Mostrar los campos calculados
-        $('#sumas').html(sumas);
-        $('#igv').html(igv);
-        $('#total').html(total);
-        $('#inputImpuesto').val(igv);
-        $('#inputTotal').val(total);
-        $('#inputSubtotal').val(sumas);
+        //Mostrar solo el total
+        $('#total').html('0');
+        $('#inputImpuesto').val('0');     // Mantener para backend
+        $('#inputTotal').val('0');        // Mantener para backend
+        $('#inputSubtotal').val('0');     // Mantener para backend
 
         limpiarCampos();
         disableButtons();
@@ -512,6 +481,5 @@
         num = num.toString().split('e');
         return signo * (num[0] + 'e' + (num[1] ? (+num[1] - decimales) : -decimales));
     }
-    //Fuente: https://es.stackoverflow.com/questions/48958/redondear-a-dos-decimales-cuando-sea-necesario
 </script>
 @endpush

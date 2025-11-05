@@ -14,7 +14,7 @@
 @section('content')
 
 <div class="container-fluid px-4">
-    <h1 class="mt-4 text-center">Control de Equipos</h1>
+    <h1 class="mt-4 text-center">Control de Equipos e Insumos</h1>
 
     <x-breadcrumb.template>
         <x-breadcrumb.item :href="route('panel')" content="Inicio" />
@@ -25,15 +25,17 @@
         <form action="{{route('kardex.index')}}" method="get">
             <div class="row gy-2">
                 <label for="producto_id" class="col-sm-2 col-form-label">
-                    Producto</label>
+                    Recursos</label>
                 <div class="col-sm-8">
                     <select name="producto_id" id="producto_id"
                         class="form-control selectpicker"
-                        data-live-search='true' data-size='3' title='Busque un equipo aquí'>
+                        data-live-search='true' data-size='3' title='Busque un equipo o insumo aquí'>
                         @foreach ($productos as $item)
-                        <option value="{{$item->id}}" {{$item->id == $producto_id ? 'selected': ''}}>
-                            {{$item->nombre_completo}}
-                        </option>
+                            @if (strtoupper(substr($item->codigo, 0, 1)) === 'E')
+                            <option value="{{$item->id}}" {{$item->id == $producto_id ? 'selected': ''}}>
+                                {{$item->codigo}} - {{$item->nombre}}
+                            </option>
+                            @endif
                         @endforeach
                     </select>
                 </div>
@@ -49,7 +51,7 @@
     <div class="card">
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
-            Tabla kardex del producto
+            Tabla kardex del equipos e insumos
         </div>
         <div class="card-body">
             <table id="datatablesSimple" class="table-striped fs-6">
@@ -72,10 +74,21 @@
                             {{$item->fecha}} - {{$item->hora}}
                         </td>
                         <td>
-                            {{$item->tipo_transaccion}}
+                            @if($item->tipo_transaccion == 'APERTURA')
+                                UBICAR
+                            @else
+                                {{$item->tipo_transaccion}}
+                            @endif
                         </td>
                         <td>
-                            {{$item->descripcion_transaccion}}
+                            @php
+                                $descripcion = $item->descripcion_transaccion;
+                                // Reemplazar "producto" por "recurso" (case insensitive)
+                                $descripcion = preg_replace('/producto/i', 'recurso', $descripcion);
+                                // Reemplazar "Apertura del" por "Ubicación del"
+                                $descripcion = preg_replace('/Apertura del/i', 'Ubicación del', $descripcion);
+                            @endphp
+                            {{$descripcion}}
                         </td>
                         <td>
                             {{$item->entrada}}
@@ -111,4 +124,26 @@
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
 <script src="{{ asset('js/datatables-simple-demo.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // Configurar el select para mostrar productos que empiezan con "E" al abrir
+        $('#producto_id').on('shown.bs.select', function () {
+            var $searchbox = $(this).next().find('.bs-searchbox input');
+            $searchbox.val('E');
+            $searchbox.trigger('input');
+        });
+
+        // Mostrar todos los registros en la tabla
+        window.addEventListener('DOMContentLoaded', event => {
+            const datatablesSimple = document.getElementById('datatablesSimple');
+            if (datatablesSimple) {
+                new simpleDatatables.DataTable(datatablesSimple, {
+                    perPage: 100, // Mostrar muchos registros por página
+                    perPageSelect: false, // Ocultar selector de registros por página
+                });
+            }
+        });
+    });
+</script>
 @endpush

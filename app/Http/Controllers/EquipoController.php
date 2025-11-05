@@ -12,6 +12,7 @@ use App\Services\ActivityLogService;
 use App\Services\ProductoService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request; // AÑADIR ESTA IMPORTACIÓN
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
@@ -86,7 +87,7 @@ class EquipoController extends Controller
             $this->productoService->crearProducto($request->validated());
             ActivityLogService::log('Creación de equipo', 'Equipos', $request->validated());
             
-            return redirect()->route('equipos.index')->with('success', 'Equipo registrado');
+            return redirect()->route('equipos.index')->with('success', 'Equipo registrado correctamente');
         } catch (Throwable $e) {
             Log::error('Error al crear el equipo', ['error' => $e->getMessage()]);
             
@@ -105,7 +106,7 @@ class EquipoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Producto $equipo): View
+    public function edit(Producto $equipo, Request $request): View // AÑADIR Request $request
     {
         // Verificar que el equipo tenga código que empiece con E (opcional, para seguridad)
         if ($equipo->codigo && !str_starts_with($equipo->codigo, 'E')) {
@@ -127,7 +128,10 @@ class EquipoController extends Controller
             ->where('c.estado', 1)
             ->get();
 
-        return view('equipo.edit', compact('equipo', 'marcas', 'presentaciones', 'categorias'));
+        // Pasar el parámetro redirect_to a la vista
+        $redirectTo = $request->get('redirect_to', 'equipos');
+
+        return view('equipo.edit', compact('equipo', 'marcas', 'presentaciones', 'categorias', 'redirectTo'));
     }
 
     /**
@@ -139,11 +143,22 @@ class EquipoController extends Controller
             $this->productoService->editarProducto($request->validated(), $equipo);
             ActivityLogService::log('Edición de equipo', 'Equipos', $request->validated());
             
-            return redirect()->route('equipos.index')->with('success', 'Equipo editado');
+            // Obtener el destino de redirección del formulario
+            $redirectTo = $request->get('redirect_to', 'equipos.index');
+            
+            // Redirigir según el parámetro
+            if ($redirectTo === 'equipos' || $redirectTo === 'equipos.index') {
+                return redirect()->route('equipos.index')->with('success', 'Equipo editado correctamente');
+            } else {
+                // Por defecto redirigir a equipos
+                return redirect()->route('equipos.index')->with('success', 'Equipo editado correctamente');
+            }
+            
         } catch (Throwable $e) {
             Log::error('Error al editar el equipo', ['error' => $e->getMessage()]);
             
-            return redirect()->route('equipos.index')->with('error', 'Ups, algo falló');
+            // En caso de error, redirigir de vuelta con los datos
+            return redirect()->back()->withInput()->with('error', 'Error al editar el equipo: ' . $e->getMessage());
         }
     }
 

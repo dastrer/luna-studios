@@ -51,10 +51,10 @@ class presentacioneController extends Controller
             DB::commit();
             ActivityLogService::log('Creación de presentación', 'Presentaciones', $request->validated());
 
-            return redirect()->route('presentaciones.index')->with('success', 'Presentación registrada');
+            return redirect()->route('presentaciones.index')->with('success', 'Paquete registrada');
         } catch (Throwable $e) {
             DB::rollBack();
-            Log::error("Error al crear la presentacion", ['error' => $e->getMessage()]);
+            Log::error("Error al crear el paquete", ['error' => $e->getMessage()]);
             return redirect()->route('presentaciones.index')->with('error', 'Ups algo falló');
         }
     }
@@ -86,9 +86,9 @@ class presentacioneController extends Controller
 
             ActivityLogService::log('Edición de presentación', 'Presentaciones', $request->validated());
 
-            return redirect()->route('presentaciones.index')->with('success', 'Presentación editada');
+            return redirect()->route('presentaciones.index')->with('success', 'Paquete editado correctamente');
         } catch (Throwable $e) {
-            Log::error("Error al editar la presentacion", ['error' => $e->getMessage()]);
+            Log::error("Error al editar el paquete", ['error' => $e->getMessage()]);
 
             return redirect()->route('presentaciones.index')->with('error', 'Ups, algo falló');
         }
@@ -104,7 +104,7 @@ class presentacioneController extends Controller
 
             $nuevoEstado = $presentacione->caracteristica->estado == 1 ? 0 : 1;
             $presentacione->caracteristica->update(['estado' => $nuevoEstado]);
-            $message = $nuevoEstado == 1 ? 'Presentación restaurado' : 'Presentación eliminada';
+            $message = $nuevoEstado == 1 ? 'Paquete restaurado' : 'Paquete eliminado';
 
             ActivityLogService::log($message, 'Presentaciones', [
                 'presentacione_id' => $id,
@@ -114,7 +114,7 @@ class presentacioneController extends Controller
             return redirect()->route('presentaciones.index')->with('success', $message);
         } catch (Throwable $e) {
 
-            Log::error('Error al eliminar/restaurar la presentación', ['error' => $e->getMessage()]);
+            Log::error('Error al eliminar/restaurar el paquete', ['error' => $e->getMessage()]);
 
             return redirect()->route('presentaciones.index')->with('error', 'Ups, algo falló');
         }

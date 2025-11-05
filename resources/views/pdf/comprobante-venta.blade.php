@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comprobante de venta</title>
+    <title>Comprobante de Entrega</title>
 </head>
 <style>
     body {
@@ -96,7 +96,7 @@
         <div class="header">
             <div class="column">
                 <div class="column bordered">
-                    <div><strong>{{strtoupper($venta->comprobante->nombre)}} DE VENTA ELECTRÓNICA</strong></div>
+                    <div><strong>{{strtoupper($venta->comprobante->nombre)}} DE ENTREGA</strong></div>
                     <div><strong>{{$venta->numero_comprobante}}</strong></div>
                 </div>
 
@@ -121,9 +121,8 @@
             <thead>
                 <tr>
                     <th>Cant.</th>
-                    <th>Unidad</th>
                     <th>Descripción</th>
-                    <th>Neto</th>
+                    <th>Precio Unitario</th>
                     <th>Total</th>
                 </tr>
             </thead>
@@ -131,7 +130,6 @@
                 @foreach ($venta->productos as $detalle)
                 <tr>
                     <td>{{$detalle->pivot->cantidad}}</td>
-                    <td>{{$detalle->presentacione->sigla}}</td>
                     <td>{{$detalle->nombre}}</td>
                     <td>{{$detalle->pivot->precio_venta}}</td>
                     <td>{{$detalle->pivot->cantidad * $detalle->pivot->precio_venta}}</td>
@@ -141,11 +139,9 @@
         </table>
 
         <div class="datos">
-            <div><strong>Subtotal:</strong> {{$venta->subtotal}} {{$empresa->moneda->simbolo}}</div>
-            <div><strong>{{$empresa->abreviatura_impuesto}}:</strong> {{$venta->impuesto}} {{$empresa->moneda->simbolo}}</div>
             <div><strong>Total:</strong> {{$venta->total}} {{$empresa->moneda->simbolo}}</div>
             <div><strong>Modalidad de Pago:</strong> {{$venta->metodo_pago}}</div>
-            <div><strong>Cajero:</strong> {{$venta->user->empleado->razon_social ?? $venta->user->name}}</div>
+            <div><strong>Atendido por:</strong> {{$venta->user->empleado->razon_social ?? $venta->user->name}}</div>
         </div>
 
         <div class="footer">

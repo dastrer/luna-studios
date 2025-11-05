@@ -86,10 +86,10 @@ class ProductoController extends Controller
             $this->productoService->crearProducto($data);
             
             ActivityLogService::log('Creación de producto', 'Productos', $data);
-            return redirect()->route('productos.index')->with('success', 'Producto registrado exitosamente');
+            return redirect()->route('productos.index')->with('success', 'Servicio registrado exitosamente');
         } catch (Throwable $e) {
             Log::error('Error al crear el producto', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
-            return redirect()->back()->withInput()->with('error', 'Error al crear el producto: ' . $e->getMessage());
+            return redirect()->back()->withInput()->with('error', 'Error al crear el servicio: ' . $e->getMessage());
         }
     }
 
@@ -149,10 +149,10 @@ class ProductoController extends Controller
             $this->productoService->editarProducto($data, $producto);
             
             ActivityLogService::log('Edición de producto', 'Productos', $data);
-            return redirect()->route('productos.index')->with('success', 'Producto actualizado exitosamente');
+            return redirect()->route('productos.index')->with('success', 'Servicio actualizado exitosamente');
         } catch (Throwable $e) {
             Log::error('Error al editar el producto', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
-            return redirect()->back()->withInput()->with('error', 'Error al editar el producto: ' . $e->getMessage());
+            return redirect()->back()->withInput()->with('error', 'Error al editar el servicio: ' . $e->getMessage());
         }
     }
 

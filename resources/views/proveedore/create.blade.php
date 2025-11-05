@@ -42,8 +42,8 @@
 
                     <!-------Razón social------->
                     <div class="col-12" id="box-razon-social">
-                        <label id="label-natural" for="razon_social" class="form-label">Nombres y apellidos:</label>
-                        <label id="label-juridica" for="razon_social" class="form-label">Nombre de la empresa:</label>
+                        <label id="label-natural" for="razon_social" class="form-label">Razon Social:</label>
+                        <label id="label-juridica" for="razon_social" class="form-label">Razon Social:</label>
 
                         <input required type="text" name="razon_social" id="razon_social" class="form-control" value="{{old('razon_social')}}">
 

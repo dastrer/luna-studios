@@ -43,7 +43,7 @@
             @if ($caja->estado == 1)
             @can('crear-venta')
             <a href="{{route('ventas.create')}}">
-                <button type="button" class="btn btn-primary">Nueva venta</button>
+                <button type="button" class="btn btn-primary">Nueva entrega</button>
             </a>
             @endcan
 
@@ -85,7 +85,11 @@
                     @foreach ($caja->movimientos as $item)
                     <tr>
                         <td>
-                            {{$item->tipo->value}}
+                            @if($item->tipo->value == 'VENTA')
+                                ENTREGA
+                            @else
+                                {{$item->tipo->value}}
+                            @endif
                         </td>
                         <td>
                             {{$item->descripcion}}

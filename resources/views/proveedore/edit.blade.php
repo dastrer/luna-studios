@@ -30,7 +30,7 @@
                     <!-------Razón social------->
                     <div class="col-12">
                         <label for="razon_social" class="form-label">
-                            {{ $proveedore->persona->tipo->value == 'NATURAL' ? 'Nombres y apellidos:' : 'Nombre de la empresa:'}}
+                            {{ $proveedore->persona->tipo->value == 'NATURAL' ? 'Razon Social:' : 'Razon Social:'}}
                         </label>
                         <input required
                             type="text"

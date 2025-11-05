@@ -31,7 +31,7 @@
                     <!-------Razón social------->
                     <div class="col-12">
                         <label id="label-juridica" for="razon_social" class="form-label">
-                            {{ $cliente->persona->tipo->value == 'NATURAL' ? 'Nombres y apellidos:' : 'Nombre de la empresa:'}}
+                            {{ $cliente->persona->tipo->value == 'NATURAL' ? 'Razon Social:' : 'Razon Social:'}}
                         </label>
                         <input required
                             type="text"

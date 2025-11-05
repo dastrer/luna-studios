@@ -56,8 +56,14 @@ class compraController extends Controller
         $proveedores = Proveedore::whereHas('persona', function ($query) {
             $query->where('estado', 1);
         })->get();
+        
         $comprobantes = $comprobanteService->obtenerComprobantes();
-        $productos = Producto::where('estado', 1)->get();
+        
+        // ✅ MODIFICADO: Filtrar solo equipos (código que empieza con E)
+        $productos = Producto::where('estado', 1)
+            ->where('codigo', 'LIKE', 'E%') // Solo equipos
+            ->get();
+        
         $optionsMetodoPago = MetodoPagoEnum::cases();
         $empresa = $this->empresaService->obtenerEmpresa();
 
@@ -77,6 +83,18 @@ class compraController extends Controller
     {
         DB::beginTransaction();
         try {
+            // ✅ MODIFICADO: Validar que todos los productos sean equipos (código que empieza con E)
+            $arrayProducto_id = $request->get('arrayidproducto');
+            
+            if ($arrayProducto_id) {
+                $productosNoEquipos = Producto::whereIn('id', $arrayProducto_id)
+                    ->where('codigo', 'NOT LIKE', 'E%')
+                    ->exists();
+                    
+                if ($productosNoEquipos) {
+                    throw new \Exception('Solo se pueden comprar equipos (productos con código que empieza con E)');
+                }
+            }
 
             //Llenar tabla compras
             $compra = new Compra();
@@ -124,7 +142,7 @@ class compraController extends Controller
         } catch (Throwable $e) {
             DB::rollBack();
             Log::error('Error al crear la compra', ['error' => $e->getMessage()]);
-            return redirect()->route('compras.index')->with('error', 'Ups, algo falló');
+            return redirect()->route('compras.index')->with('error', 'Error: ' . $e->getMessage());
         }
     }
 
