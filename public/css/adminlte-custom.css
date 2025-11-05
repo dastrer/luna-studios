@@ -1,0 +1,458 @@
+/* ===== ESTILOS MEJORADOS PARA EL MENÚ LATERAL - LUNA STUDIOS ===== */
+:root {
+    /* Colores base del login */
+    --bg-gray: #f4f6f9;
+    --card-header: #e9ecef;
+    --border-light: #dee2e6;
+    --btn-primary: #6c757d;
+    --btn-hover: #5a6268;
+    
+    /* Nueva paleta de colores armoniosos para el nav */
+    --nav-bg: #2c3e50;
+    --nav-accent: #3498db;
+    --nav-hover: #34495e;
+    --nav-active: #2980b9;
+    --nav-text: #ecf0f1;
+    --nav-heading: #bdc3c7;
+    --nav-footer: #1a252f;
+    --nav-icon: #3498db;
+    --nav-collapse-bg: #34495e;
+}
+
+/* ===== APLICAR FUENTE INTER A TODO EL SITIO ===== */
+body, .sb-sidenav, .sb-sidenav-menu, .nav-link, .nav-heading, .sb-sidenav-footer {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    letter-spacing: 0.2px;
+    line-height: 1.5;
+}
+
+/* ===== SIDEBAR PRINCIPAL ===== */
+.sb-sidenav-dark {
+    background-color: var(--nav-bg) !important;
+}
+
+#layoutSidenav_nav {
+    background-color: var(--nav-bg) !important;
+}
+
+.sb-sidenav-menu {
+    padding: 0 !important;
+}
+
+/* ===== ENCABEZADOS DE SECCIÓN ===== */
+.sb-sidenav .nav .nav-heading {
+    padding: 0.75rem 1.5rem !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    color: var(--nav-heading) !important;
+    margin-top: 1rem !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    background-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+.sb-sidenav .nav .nav-heading:first-child {
+    margin-top: 0 !important;
+}
+
+/* ===== ENLACES DE NAVEGACIÓN ===== */
+.sb-sidenav .nav-link {
+    color: var(--nav-text) !important;
+    border-left: 3px solid transparent !important;
+    transition: all 0.3s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 0.75rem 1.5rem !important;
+    text-decoration: none !important;
+    position: relative !important;
+}
+
+.sb-sidenav .nav-link:hover {
+    background-color: var(--nav-hover) !important;
+    color: white !important;
+    border-left-color: var(--nav-accent) !important;
+}
+
+.sb-sidenav .nav-link.active {
+    background-color: var(--nav-active) !important;
+    color: white !important;
+    border-left-color: var(--nav-accent) !important;
+}
+
+/* ===== ICONOS ===== */
+.sb-sidenav .nav-link i {
+    color: var(--nav-icon) !important;
+    margin-right: 0.5rem !important;
+    width: 1.5rem !important;
+    text-align: center !important;
+    font-size: 0.9rem !important;
+}
+
+/* ===== ELEMENTOS COLABSABLES (ACCORDION) ===== */
+.sb-sidenav.accordion .nav-collapsed .nav-link {
+    position: relative !important;
+}
+
+/* Flecha indicadora para elementos colapsables */
+.sb-sidenav.accordion .nav-collapsed .nav-link::after {
+    content: '\f107' !important;
+    font-family: 'Font Awesome 6 Free' !important;
+    font-weight: 900 !important;
+    position: absolute !important;
+    right: 1.5rem !important;
+    transition: transform 0.3s ease !important;
+    color: var(--nav-text) !important;
+}
+
+.sb-sidenav.accordion .nav-collapsed.show .nav-link::after {
+    transform: rotate(180deg) !important;
+}
+
+/* Contenido colapsable */
+.sb-sidenav .nav-collapsed-content {
+    background-color: var(--nav-collapse-bg) !important;
+    transition: all 0.3s ease !important;
+    overflow: hidden !important;
+}
+
+/* Items dentro de elementos colapsables */
+.sb-sidenav .nav-collapsed-item {
+    color: var(--nav-text) !important;
+    padding: 0.6rem 1.5rem 0.6rem 3rem !important;
+    border-left: 3px solid transparent !important;
+    transition: all 0.3s ease !important;
+    display: block !important;
+    text-decoration: none !important;
+    position: relative !important;
+}
+
+.sb-sidenav .nav-collapsed-item:hover {
+    background-color: rgba(52, 152, 219, 0.1) !important;
+    color: white !important;
+    border-left-color: var(--nav-accent) !important;
+}
+
+.sb-sidenav .nav-collapsed-item.active {
+    background-color: rgba(52, 152, 219, 0.2) !important;
+    color: white !important;
+    border-left-color: var(--nav-accent) !important;
+}
+
+/* ===== FOOTER DEL SIDEBAR ===== */
+.sb-sidenav-footer {
+    background-color: var(--nav-footer) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    padding: 1rem !important;
+}
+
+.sb-sidenav-footer .small {
+    color: var(--nav-heading) !important;
+    font-size: 0.75rem !important;
+    margin-bottom: 0.25rem !important;
+    font-weight: 400 !important;
+}
+
+.sb-sidenav-footer div:last-child {
+    color: var(--nav-text) !important;
+    font-weight: 500 !important;
+    font-size: 0.875rem !important;
+}
+
+/* ===== ESTADOS DEL ACCORDION ===== */
+.sb-sidenav.accordion .nav-collapsed .nav-link[aria-expanded="true"] {
+    background-color: var(--nav-hover) !important;
+    color: white !important;
+}
+
+/* ===== MEJORAS DE DISEÑO ===== */
+/* Suavizar transiciones */
+.sb-sidenav .nav-link,
+.sb-sidenav .nav-collapsed-item,
+.sb-sidenav .nav-collapsed-content {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Mejorar el scroll */
+.sb-sidenav-menu {
+    scrollbar-width: thin;
+    scrollbar-color: var(--nav-hover) var(--nav-bg);
+}
+
+.sb-sidenav-menu::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sb-sidenav-menu::-webkit-scrollbar-track {
+    background: var(--nav-bg);
+}
+
+.sb-sidenav-menu::-webkit-scrollbar-thumb {
+    background-color: var(--nav-hover);
+    border-radius: 3px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 767.98px) {
+    .sb-sidenav .nav-link {
+        padding: 0.75rem 1rem !important;
+    }
+    
+    .sb-sidenav .nav-heading {
+        padding: 0.75rem 1rem !important;
+    }
+    
+    .sb-sidenav .nav-collapsed-item {
+        padding-left: 2.5rem !important;
+    }
+    
+    .sb-sidenav.accordion .nav-collapsed .nav-link::after {
+        right: 1rem !important;
+    }
+}
+
+/* ===== ESTILOS PARA ESTADO ACTIVO MEJORADO ===== */
+.sb-sidenav .nav-link.active i {
+    color: white !important;
+}
+
+.sb-sidenav .nav-collapsed-item.active {
+    font-weight: 500 !important;
+}
+
+/* ===== ANIMACIONES SUAVES ===== */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.sb-sidenav .nav-collapsed-content .nav-collapsed-item {
+    animation: fadeIn 0.2s ease-out;
+}
+
+/* ===== ESTILOS MEJORADOS PARA LA BARRA SUPERIOR - LUNA STUDIOS ===== */
+
+/* ===== BARRA SUPERIOR PRINCIPAL ===== */
+.sb-topnav.navbar-dark {
+    background: linear-gradient(135deg, var(--nav-bg) 0%, #1a252f 100%) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+    padding: 0.5rem 0 !important;
+}
+
+/* ===== MARCA/LOGO ===== */
+.sb-topnav .navbar-brand {
+    font-weight: 600 !important;
+    font-size: 1.25rem !important;
+    color: var(--nav-text) !important;
+    transition: color 0.3s ease !important;
+}
+
+.sb-topnav .navbar-brand:hover {
+    color: var(--nav-accent) !important;
+}
+
+/* ===== BOTÓN TOGGLE SIDEBAR ===== */
+.sb-topnav #sidebarToggle {
+    color: var(--nav-text) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 6px !important;
+    padding: 0.5rem !important;
+    transition: all 0.3s ease !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.sb-topnav #sidebarToggle:hover {
+    color: var(--nav-accent) !important;
+    border-color: var(--nav-accent) !important;
+    background: rgba(52, 152, 219, 0.1) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* ===== BARRA DE BÚSQUEDA ===== */
+.sb-topnav .input-group {
+    border-radius: 8px !important;
+    overflow: hidden !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    transition: all 0.3s ease !important;
+}
+
+.sb-topnav .input-group:focus-within {
+    border-color: var(--nav-accent) !important;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2) !important;
+}
+
+.sb-topnav .form-control {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: none !important;
+    color: var(--nav-text) !important;
+    padding: 0.75rem 1rem !important;
+}
+
+.sb-topnav .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.sb-topnav .form-control:focus {
+    background: rgba(255, 255, 255, 0.15) !important;
+    box-shadow: none !important;
+    color: white !important;
+}
+
+.sb-topnav .btn-primary {
+    background: var(--nav-accent) !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0.75rem 1rem !important;
+    transition: all 0.3s ease !important;
+}
+
+.sb-topnav .btn-primary:hover {
+    background: #2980b9 !important;
+    transform: translateY(-1px) !important;
+}
+
+/* ===== NOTIFICACIONES ===== */
+.sb-topnav .nav-item.dropdown .nav-link {
+    color: var(--nav-text) !important;
+    border-radius: 8px !important;
+    padding: 0.5rem 0.75rem !important;
+    transition: all 0.3s ease !important;
+    position: relative !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid transparent !important;
+}
+
+.sb-topnav .nav-item.dropdown .nav-link:hover {
+    color: var(--nav-accent) !important;
+    background: rgba(52, 152, 219, 0.1) !important;
+    border-color: rgba(52, 152, 219, 0.3) !important;
+}
+
+.sb-topnav .badge.bg-danger {
+    background: linear-gradient(135deg, #e74c3c, #c0392b) !important;
+    border: 2px solid var(--nav-bg) !important;
+    font-size: 0.7rem !important;
+    font-weight: 600 !important;
+    position: absolute !important;
+    top: -5px !important;
+    right: -5px !important;
+    min-width: 18px !important;
+    height: 18px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Dropdown de notificaciones */
+.sb-topnav .dropdown-menu {
+    background: var(--nav-bg) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+.sb-topnav .dropdown-item {
+    color: var(--nav-text) !important;
+    padding: 0.75rem 1rem !important;
+    transition: all 0.3s ease !important;
+    border-radius: 4px !important;
+    margin: 2px 0 !important;
+}
+
+.sb-topnav .dropdown-item:hover {
+    background: var(--nav-accent) !important;
+    color: white !important;
+    transform: translateX(5px) !important;
+}
+
+.sb-topnav .dropdown-divider {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    margin: 0.5rem 0 !important;
+}
+
+.sb-topnav .text-muted {
+    color: var(--nav-heading) !important;
+}
+
+/* ===== MENÚ DE USUARIO ===== */
+.sb-topnav .navbar-nav .nav-link {
+    color: var(--nav-text) !important;
+    border-radius: 8px !important;
+    padding: 0.5rem 0.75rem !important;
+    transition: all 0.3s ease !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid transparent !important;
+}
+
+.sb-topnav .navbar-nav .nav-link:hover {
+    color: var(--nav-accent) !important;
+    background: rgba(52, 152, 219, 0.1) !important;
+    border-color: rgba(52, 152, 219, 0.3) !important;
+}
+
+/* ===== ICONOS ===== */
+.sb-topnav .fas,
+.sb-topnav .fa-fw {
+    color: var(--nav-icon) !important;
+    transition: color 0.3s ease !important;
+}
+
+.sb-topnav .nav-link:hover .fas,
+.sb-topnav .nav-link:hover .fa-fw {
+    color: var(--nav-accent) !important;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 767.98px) {
+    .sb-topnav.navbar-dark {
+        padding: 0.25rem 0 !important;
+    }
+    
+    .sb-topnav .navbar-brand {
+        font-size: 1.1rem !important;
+        padding-left: 1rem !important;
+    }
+    
+    .sb-topnav #sidebarToggle {
+        padding: 0.4rem !important;
+        margin-right: 0.5rem !important;
+    }
+    
+    .sb-topnav .form-control {
+        padding: 0.5rem 0.75rem !important;
+        font-size: 0.9rem !important;
+    }
+    
+    .sb-topnav .btn-primary {
+        padding: 0.5rem 0.75rem !important;
+    }
+    
+    .sb-topnav .nav-item.dropdown .nav-link,
+    .sb-topnav .navbar-nav .nav-link {
+        padding: 0.4rem 0.6rem !important;
+    }
+}
+
+/* ===== ANIMACIONES ===== */
+@keyframes pulseGlow {
+    0% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(52, 152, 219, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0); }
+}
+
+.sb-topnav .badge.bg-danger {
+    animation: pulseGlow 2s infinite;
+}
+
+/* ===== MEJORAS DE ACCESIBILIDAD ===== */
+.sb-topnav .nav-link:focus {
+    outline: 2px solid var(--nav-accent) !important;
+    outline-offset: 2px !important;
+}
+
+.sb-topnav .dropdown-item:focus {
+    background: var(--nav-accent) !important;
+    color: white !important;
+}

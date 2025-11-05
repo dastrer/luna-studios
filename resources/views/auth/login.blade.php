@@ -7,12 +7,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="Inicio de sesión del sistema" />
     <meta name="author" content="SakCode" />
-    <title>Sistema de ventas - Login</title>
+    <title>Productora Audiovisual - Login</title>
+
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <!-- Fuente moderna: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+
+    <style>
+        /* Tipografía moderna */
+        body, input, button, label, h4, h5 {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            letter-spacing: 0.2px;
+            line-height: 1.5;
+        }
+
+        body.bg-custom-gray {
+            background-color: #f4f6f9 !important;
+        }
+
+        .card-header-custom {
+            background-color: #e9ecef;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .btn-luna {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            color: white;
+            font-weight: 500;
+        }
+
+        .btn-luna:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+
+        .logo-placeholder {
+            height: 50px;
+            width: auto;
+            margin-bottom: 15px;
+        }
+
+        h4, h5 {
+            font-weight: 500;
+        }
+    </style>
 </head>
 
-<body class="bg-primary">
+<body class="bg-custom-gray">
     <div id="layoutAuthentication">
         <div id="layoutAuthentication_content">
             <main>
@@ -20,63 +66,61 @@
                     <div class="row justify-content-center">
                         <div class="col-lg-5">
                             <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                <div class="card-header">
-                                    <h3 class="text-center font-weight-light my-4">Acceso al sistema</h3>
-                                </div>
-                                <div class="card-body">
-                                    @if ($errors->any())
-                                    @foreach ($errors->all() as $item)
-                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                        {{$item}}
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                <div class="card-header card-header-custom pt-4 pb-2">
+                                    <div class="text-center">
+                                        <img src="placeholder-logo.png" alt="Logo de LUNA STUDIOS" class="logo-placeholder">
+                                        <h4 class="text-center mb-1 text-secondary"><strong>LUNA STUDIOS</strong></h4>
+                                        <h5 class="text-center mb-4 text-muted">Productora Audiovisual</h5>
                                     </div>
-                                    @endforeach
+                                </div>
+                                <div class="card-body pt-4">
+                                    @if ($errors->any())
+                                        @foreach ($errors->all() as $item)
+                                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                {{$item}}
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                            </div>
+                                        @endforeach
                                     @endif
+
                                     <form action="{{route('login.login')}}" method="post">
                                         @csrf
-                                        <div class="form-floating mb-3">
+                                        <div class="form-floating mb-4">
                                             <input autofocus autocomplete="off" value="invitado@gmail.com" class="form-control" name="email" id="inputEmail" type="email" placeholder="name@example.com" />
-                                            <label for="inputEmail">Correo eléctronico</label>
+                                            <label for="inputEmail">Correo electrónico</label>
                                         </div>
-                                        <div class="form-floating mb-3">
+                                        <div class="form-floating mb-4">
                                             <input class="form-control" name="password" value="12345678" id="inputPassword" type="password" placeholder="Password" />
                                             <label for="inputPassword">Contraseña</label>
                                         </div>
-                                        <!--div class="form-check mb-3">
-                                                <input class="form-check-input" id="inputRememberPassword" type="checkbox" value="" />
-                                                <label class="form-check-label" for="inputRememberPassword">Remember Password</label>
-                                            </div--->
-                                        <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                                            <!--a class="small" href="password.html">Forgot Password?</a-->
-                                            <button class="btn btn-primary" type="submit"><a>Iniciar sesión</a></button>
+                                        <div class="d-grid mt-5 mb-0">
+                                            <button class="btn btn-luna btn-block" type="submit">Iniciar sesión</button>
                                         </div>
                                     </form>
                                 </div>
-                                <!---div class="card-footer text-center py-3">
-                                        <div class="small"><a href="register.html">Need an account? Sign up!</a></div>
-                                    </div---->
                             </div>
                         </div>
                     </div>
                 </div>
             </main>
         </div>
+
         <div id="layoutAuthentication_footer">
             <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid px-4">
                     <div class="d-flex align-items-center justify-content-between small">
-                        <div class="text-muted">Copyright &copy; Your Website 2022</div>
+                        <div class="text-muted">Copyright &copy; LUNA STUDIOS {{ date('Y') }}</div>
                         <div>
-                            <a href="#">Privacy Policy</a>
+                            <a href="#">Política de Privacidad</a>
                             &middot;
-                            <a href="#">Terms &amp; Conditions</a>
+                            <a href="#">Términos y Condiciones</a>
                         </div>
                     </div>
                 </div>
             </footer>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-</body>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
 </html>

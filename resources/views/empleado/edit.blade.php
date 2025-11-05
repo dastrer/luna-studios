@@ -25,7 +25,7 @@
             <div class="col-md-6">
                 <x-forms.input id="razon_social"
                     required='true'
-                    labelText='Razon Social'
+                    labelText='Nombres y Apellidos'
                     :defaultValue='$empleado->razon_social' />
             </div>
 
