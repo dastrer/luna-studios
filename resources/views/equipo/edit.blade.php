@@ -7,6 +7,10 @@
     #descripcion {
         resize: none;
     }
+    .input-group-text {
+        background-color: #e9ecef;
+        border: 1px solid #ced4da;
+    }
 </style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
@@ -22,7 +26,7 @@
     </ol>
 
     <div class="card">
-        <form action="{{ route('equipos.update', ['equipo' => $equipo]) }}" method="post" enctype="multipart/form-data">
+        <form action="{{ route('equipos.update', ['equipo' => $equipo]) }}" method="post" enctype="multipart/form-data" id="equipoForm">
             @method('PUT')
             @csrf
             <div class="card-body text-bg-light">
@@ -77,8 +81,20 @@
 
                             <!----Codigo---->
                             <div class="col-12">
-                                <label for="codigo" class="form-label">Abreviacion:</label>
-                                <input type="text" name="codigo" id="codigo" class="form-control" value="{{ old('codigo', $equipo->codigo) }}">
+                                <label for="codigo_input" class="form-label">Abreviacion:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">E</span>
+                                    <input type="text" 
+                                           name="codigo_input" 
+                                           id="codigo_input" 
+                                           class="form-control" 
+                                           value="{{ old('codigo_input', substr($equipo->codigo, 1)) }}"
+                                           placeholder="001"
+                                           oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                           required>
+                                    <input type="hidden" name="codigo" id="codigo_real" value="{{ old('codigo', $equipo->codigo) }}">
+                                </div>
+                                <small class="text-muted">Formato: E + números (ej: E001, E123)</small>
                                 @error('codigo')
                                 <small class="text-danger">{{'*'.$message}}</small>
                                 @enderror
@@ -125,26 +141,9 @@
                                 @enderror
                             </div>
 
-                            <!---Categorías---->
-                            <div class="col-12">
-                                <label for="categoria_id" class="form-label">Categoría:</label>
-                                <select data-size="4"
-                                    title="Seleccione la categoría"
-                                    data-live-search="true"
-                                    name="categoria_id"
-                                    id="categoria_id"
-                                    class="form-control selectpicker show-tick">
-                                    <option value="">No tiene categoría</option>
-                                    @foreach ($categorias as $item)
-                                    <option value="{{ $item->id }}" {{ $equipo->categoria_id == $item->id || old('categoria_id') == $item->id ? 'selected' : '' }}>
-                                        {{ $item->nombre }}
-                                    </option>
-                                    @endforeach
-                                </select>
-                                @error('categoria_id')
-                                <small class="text-danger">{{'*'.$message}}</small>
-                                @enderror
-                            </div>
+                            {{-- Categoría oculta --}}
+                            <input type="hidden" name="categoria_id" value="{{ $equipo->categoria_id ?? '' }}">
+
                         </div>
 
                     </div>
@@ -191,6 +190,45 @@
                 imagenDefault.style.display = 'none';
             }
             reader.readAsDataURL(this.files[0]);
+        }
+    });
+
+    // Prefijo automático para el código
+    document.addEventListener('DOMContentLoaded', function() {
+        const codigoInput = document.getElementById('codigo_input');
+        const codigoReal = document.getElementById('codigo_real');
+        const form = document.getElementById('equipoForm');
+
+        // Validar que solo se ingresen números
+        codigoInput.addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9]/g, '');
+            // Actualizar el campo real en tiempo real
+            if (this.value) {
+                codigoReal.value = 'E' + this.value;
+            } else {
+                codigoReal.value = '';
+            }
+        });
+
+        // Asegurar que se envíe el código con "E" antes del submit
+        form.addEventListener('submit', function(e) {
+            const codigoValue = codigoInput.value;
+            if (codigoValue) {
+                codigoReal.value = 'E' + codigoValue;
+            }
+            
+            // Validar que tenga al menos un número
+            if (!codigoValue) {
+                e.preventDefault();
+                alert('Por favor ingrese un código numérico');
+                codigoInput.focus();
+                return false;
+            }
+        });
+
+        // Inicializar con el valor actual (quitando la "E" del código existente)
+        if (codigoInput.value) {
+            codigoReal.value = 'E' + codigoInput.value;
         }
     });
 </script>

@@ -72,12 +72,24 @@ class ProductoController extends Controller
     public function store(StoreProductoRequest $request): RedirectResponse
     {
         try {
-            $this->productoService->crearProducto($request->validated());
-            ActivityLogService::log('Creación de producto', 'Productos', $request->validated());
-            return redirect()->route('productos.index')->with('success', 'Producto registrado');
+            // Obtener datos validados
+            $data = $request->validated();
+            
+            // Manejar la imagen si se subió
+            if ($request->hasFile('img_path')) {
+                $imageName = time() . '.' . $request->img_path->extension();
+                $request->img_path->move(public_path('images/productos'), $imageName);
+                $data['img_path'] = 'images/productos/' . $imageName;
+            }
+
+            // Crear producto usando el servicio
+            $this->productoService->crearProducto($data);
+            
+            ActivityLogService::log('Creación de producto', 'Productos', $data);
+            return redirect()->route('productos.index')->with('success', 'Producto registrado exitosamente');
         } catch (Throwable $e) {
-            Log::error('Error al crear el producto', ['error' => $e->getMessage()]);
-            return redirect()->route('productos.index')->with('error', 'Ups, algo falló');
+            Log::error('Error al crear el producto', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+            return redirect()->back()->withInput()->with('error', 'Error al crear el producto: ' . $e->getMessage());
         }
     }
 
@@ -118,12 +130,29 @@ class ProductoController extends Controller
     public function update(UpdateProductoRequest $request, Producto $producto): RedirectResponse
     {
         try {
-            $this->productoService->editarProducto($request->validated(), $producto);
-            ActivityLogService::log('Edición de producto', 'Productos', $request->validated());
-            return redirect()->route('productos.index')->with('success', 'Producto editado');
+            // Obtener datos validados
+            $data = $request->validated();
+            
+            // Manejar la imagen si se subió una nueva
+            if ($request->hasFile('img_path')) {
+                // Eliminar imagen anterior si existe
+                if ($producto->img_path && file_exists(public_path($producto->img_path))) {
+                    unlink(public_path($producto->img_path));
+                }
+                
+                $imageName = time() . '.' . $request->img_path->extension();
+                $request->img_path->move(public_path('images/productos'), $imageName);
+                $data['img_path'] = 'images/productos/' . $imageName;
+            }
+
+            // Actualizar producto usando el servicio
+            $this->productoService->editarProducto($data, $producto);
+            
+            ActivityLogService::log('Edición de producto', 'Productos', $data);
+            return redirect()->route('productos.index')->with('success', 'Producto actualizado exitosamente');
         } catch (Throwable $e) {
-            Log::error('Error al editar el producto', ['error' => $e->getMessage()]);
-            return redirect()->route('productos.index')->with('error', 'Ups, algo falló');
+            Log::error('Error al editar el producto', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+            return redirect()->back()->withInput()->with('error', 'Error al editar el producto: ' . $e->getMessage());
         }
     }
 

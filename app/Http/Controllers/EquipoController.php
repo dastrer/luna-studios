@@ -33,13 +33,23 @@ class EquipoController extends Controller
      */
     public function index(): View
     {
-        $equipos = Producto::with([
+        $query = Producto::with([
                 'categoria.caracteristica',
                 'marca.caracteristica', 
                 'presentacione.caracteristica'
             ])
-            ->latest()
-            ->get();
+            ->where('codigo', 'LIKE', 'E%'); // FILTRO: Solo equipos que empiezan con E
+
+        // Aplicar filtro por marca si existe
+        if (request()->has('marca_id') && request('marca_id') != '') {
+            if (request('marca_id') == 'sin_marca') {
+                $query->whereNull('marca_id');
+            } else {
+                $query->where('marca_id', request('marca_id'));
+            }
+        }
+
+        $equipos = $query->latest()->get();
 
         return view('equipo.index', compact('equipos'));
     }
@@ -97,6 +107,11 @@ class EquipoController extends Controller
      */
     public function edit(Producto $equipo): View
     {
+        // Verificar que el equipo tenga código que empiece con E (opcional, para seguridad)
+        if ($equipo->codigo && !str_starts_with($equipo->codigo, 'E')) {
+            abort(404, 'Equipo no encontrado');
+        }
+
         $marcas = Marca::join('caracteristicas as c', 'marcas.caracteristica_id', '=', 'c.id')
             ->select('marcas.id as id', 'c.nombre as nombre')
             ->where('c.estado', 1)

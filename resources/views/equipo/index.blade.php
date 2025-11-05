@@ -8,6 +8,12 @@
 
 @push('css')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+    .filter-card {
+        background-color: #f8f9fa;
+        border-left: 4px solid #007bff;
+    }
+</style>
 @endpush
 
 @section('content')
@@ -27,6 +33,77 @@
     </div>
     @endcan
 
+    <!-- Card de Filtros -->
+    <div class="card mb-4 filter-card">
+        <div class="card-header">
+            <i class="fas fa-filter me-1"></i>
+            Filtros de Búsqueda
+        </div>
+        <div class="card-body">
+            <form action="{{ route('equipos.index') }}" method="GET" class="row g-3">
+                <div class="col-md-4">
+                    <label for="marca_id" class="form-label">Marca</label>
+                    <select class="form-select" id="marca_id" name="marca_id">
+                        <option value="">Todas las marcas</option>
+                        @php
+                            $marcasUnicas = $equipos->pluck('marca')->unique()->filter();
+                        @endphp
+                        @foreach($marcasUnicas as $marca)
+                            @if($marca)
+                            <option value="{{ $marca->id }}" 
+                                    {{ request('marca_id') == $marca->id ? 'selected' : '' }}>
+                                {{ $marca->caracteristica->nombre ?? 'Sin nombre' }}
+                            </option>
+                            @endif
+                        @endforeach
+                        <option value="sin_marca" {{ request('marca_id') == 'sin_marca' ? 'selected' : '' }}>
+                            Sin marca
+                        </option>
+                    </select>
+                </div>
+                <!-- Espacio reservado para futuros filtros -->
+                <div class="col-md-4">
+                    <!-- Aquí puedes agregar más filtros en el futuro -->
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <div class="btn-group" role="group">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search me-1"></i> Buscar
+                        </button>
+                        <a href="{{ route('equipos.index') }}" class="btn btn-secondary">
+                            <i class="fas fa-undo me-1"></i> Limpiar
+                        </a>
+                    </div>
+                </div>
+                <div class="col-12 d-flex align-items-end justify-content-end">
+                    <small class="text-muted">
+                        @if($equipos->count() > 0)
+                            <span class="badge bg-primary">{{ $equipos->count() }} equipos encontrados</span>
+                        @else
+                            No se encontraron equipos
+                        @endif
+                    </small>
+                </div>
+            </form>
+            
+            @if(request()->has('marca_id'))
+            <div class="mt-3">
+                <small class="text-muted">
+                    <strong>Filtros aplicados:</strong>
+                    @if(request('marca_id') == 'sin_marca')
+                        Marca: Sin marca
+                    @elseif(request('marca_id'))
+                        @php
+                            $marcaSeleccionada = $marcasUnicas->firstWhere('id', request('marca_id'));
+                        @endphp
+                        Marca: {{ $marcaSeleccionada->caracteristica->nombre ?? 'N/A' }}
+                    @endif
+                </small>
+            </div>
+            @endif
+        </div>
+    </div>
+
     <div class="card">
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
@@ -37,31 +114,28 @@
                 <thead>
                     <tr>
                         <th>Equipo</th>
-                        <th>Precio</th>
+                        <th>Precio Adquirido (Bs)</th>
                         <th>Marca</th>
-                        <th>Categoría</th>
                         <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($equipos as $item) {{-- Cambiado de $productos a $equipos --}}
+                    @foreach ($equipos as $item)
                     <tr>
                         <td>
-                            {{$item->nombreCompleto}}
+                            {{ $item->nombre }}
                         </td>
                         <td>
-                            {{$item->precio ?? 'No aperturado'}}
+                            Bs. {{ number_format($item->precio, 2) ?? 'No aperturado' }}
                         </td>
                         <td>
-                            {{$item->marca->caracteristica->nombre ?? 'Sin marca'}}
-                        </td>
-                        <td>
-                            {{$item->categoria->caracteristica->nombre ?? 'Sin categoría'}}
+                            {{ $item->marca->caracteristica->nombre ?? 'Sin marca' }}
                         </td>
                         <td>
                             <span class="badge rounded-pill text-bg-{{ $item->estado ? 'success' : 'danger' }}">
-                                {{ $item->estado ? 'Activo' : 'Inactivo'}}</span>
+                                {{ $item->estado ? 'Activo' : 'Inactivo' }}
+                            </span>
                         </td>
                         <td>
                             <div class="d-flex justify-content-around">
@@ -81,7 +155,7 @@
                                     <ul class="dropdown-menu text-bg-light" style="font-size: small;">
                                         <!-----Editar Equipo--->
                                         @can('editar-producto')
-                                        <li><a class="dropdown-item" href="{{ route('equipos.edit',['equipo' => $item]) }}"> {{-- Cambiado de 'producto' a 'equipo' --}}
+                                        <li><a class="dropdown-item" href="{{ route('equipos.edit',['equipo' => $item]) }}">
                                                 Editar</a>
                                         </li>
                                         @endcan
@@ -122,13 +196,19 @@
                         <div class="modal-dialog modal-dialog-scrollable">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Detalles del equipo</h1>
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Detalles del equipo: {{ $item->codigo }}</h1>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                     <div class="row">
-                                        <div class="col-12">
-                                            <p><span class="fw-bolder">Descripción: </span>{{$item->descripcion ?? 'No tiene'}}</p>
+                                        <div class="col-12 mb-3">
+                                            <p><span class="fw-bolder">Nombre: </span>{{ $item->nombre }}</p>
+                                        </div>
+                                        <div class="col-12 mb-3">
+                                            <p><span class="fw-bolder">Precio Adquirido: </span>Bs. {{ number_format($item->precio, 2) }}</p>
+                                        </div>
+                                        <div class="col-12 mb-3">
+                                            <p><span class="fw-bolder">Descripción: </span>{{ $item->descripcion ?? 'No tiene' }}</p>
                                         </div>
                                         <div class="col-12">
                                             <p class="fw-bolder">Imagen:</p>
@@ -162,4 +242,14 @@
 @push('js')
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
 <script src="{{ asset('js/datatables-simple-demo.js') }}"></script>
+<script>
+    // Inicializar DataTables
+    document.addEventListener('DOMContentLoaded', function() {
+        const dataTable = new simpleDatatables.DataTable("#datatablesSimple", {
+            searchable: true,
+            fixedHeight: false,
+            perPage: 10
+        });
+    });
+</script>
 @endpush

@@ -94,7 +94,7 @@
 
                             <!---Presentaciones---->
                             <div class="col-12">
-                                <label for="presentacione_id" class="form-label">Presentación:</label>
+                                <label for="presentacione_id" class="form-label">Paquete:</label>
                                 <select data-size="4"
                                     title="Seleccione una presentación"
                                     data-live-search="true"

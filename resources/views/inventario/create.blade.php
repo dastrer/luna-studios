@@ -1,8 +1,14 @@
 @extends('layouts.app')
 
-@section('title','Inicializar Equipo')
+@section('title','Inicializar Producto')
 
 @push('css')
+<style>
+    .form-control:read-only {
+        background-color: #e9ecef;
+        cursor: not-allowed;
+    }
+</style>
 @endpush
 
 @section('content')
@@ -28,23 +34,64 @@
 
         <x-slot name='header'>
             <p>Producto: <span class='fw-bold'>{{$producto->nombre_completo}}</span></p>
+            <p class="text-muted">
+                @if($tipoProducto === 'servicio')
+                    <i class="fas fa-info-circle"></i> Servicio - Configure el costo del servicio
+                @else
+                    <i class="fas fa-info-circle"></i> Equipo - Seleccione ubicación y cantidad
+                @endif
+            </p>
         </x-slot>
 
         <div class="row g-4">
 
             <!-----Producto id---->
             <input type="hidden" name="producto_id" value="{{$producto->id}}">
+            <input type="hidden" name="tipo_producto" value="{{$tipoProducto}}">
 
-            <!---Ubicaciones-->
+            @if($tipoProducto === 'servicio')
+            <!-- SERVICIOS (S): Solo mostrar costo unitario -->
+            
+            <!---Costo Unitario (solo para servicios)----->
+            <div class="col-md-6">
+                <label for="costo_unitario" class="form-label">Costo del servicio:</label>
+                <input type="number" 
+                       step="0.01" 
+                       name="costo_unitario" 
+                       id="costo_unitario" 
+                       class="form-control" 
+                       value="{{ old('costo_unitario') }}" 
+                       required
+                       placeholder="0.00"
+                       min="0">
+                <small class="text-muted">Ingrese el costo del servicio</small>
+                @error('costo_unitario')
+                <small class="text-danger">{{'*'.$message}}</small>
+                @enderror
+            </div>
+
+            <!-- Campos ocultos para servicios con valores fijos -->
+            <input type="hidden" name="ubicacione_id" value="{{ $ubicaciones->firstWhere('nombre', 'Estante 1')->id ?? '' }}">
+            <input type="hidden" name="cantidad" value="999999">
+            <input type="hidden" name="fecha_vencimiento" value="">
+
+            @else
+            <!-- EQUIPOS (E): Mostrar ubicación y cantidad, ocultar costo y fecha -->
+
+            <!---Ubicaciones (solo para equipos)-->
             <div class="col-6">
-                <label for="ubicacione_id" class="form-label">Seleccione una ubicación:</label>
+                <label for="ubicacione_id" class="form-label">Ubicación:</label>
                 <select name="ubicacione_id"
                     id="ubicaciones_id"
-                    class="form-select">
+                    class="form-select"
+                    required>
+                    <option value="">Seleccione una ubicación</option>
                     @foreach ($ubicaciones as $item)
-                    <option value="{{$item->id}}" {{ old('ubicacione_id') == $item->id ? 'selected' : '' }}>
-                        {{$item->nombre}}
-                    </option>
+                        @if($item->nombre !== 'Estante 1')
+                        <option value="{{$item->id}}" {{ old('ubicacione_id') == $item->id ? 'selected' : '' }}>
+                            {{$item->nombre}}
+                        </option>
+                        @endif
                     @endforeach
                 </select>
                 @error('ubicacione_id')
@@ -52,20 +99,28 @@
                 @enderror
             </div>
 
-            <!---Cantidad--->
+            <!---Cantidad (solo para equipos)--->
             <div class="col-md-6">
-                <x-forms.input id="cantidad" required='true' type='number' />
+                <label for="cantidad" class="form-label">Cantidad:</label>
+                <input type="number" 
+                       name="cantidad" 
+                       id="cantidad" 
+                       class="form-control" 
+                       value="{{ old('cantidad', 1) }}" 
+                       min="1"
+                       required>
+                <small class="text-muted">Ingrese la cantidad de equipos</small>
+                @error('cantidad')
+                <small class="text-danger">{{'*'.$message}}</small>
+                @enderror
             </div>
 
-            <!-----Fecha de vencimiento----->
-            <div class="col-md-6">
-                <x-forms.input id="fecha_vencimiento" type='date' labelText='Fecha de Vencimiento' />
-            </div>
+            <!-- Campos ocultos para equipos -->
+            <input type="hidden" name="costo_unitario" value="">
+            <input type="hidden" name="fecha_vencimiento" value="">
 
-              <!-----Costo Unitario----->
-              <div class="col-md-6">
-                <x-forms.input id="costo_unitario" type='number' labelText='Costo unitario' required='true'/>
-            </div>
+            @endif
+
         </div>
 
         <x-slot name='footer'>
@@ -73,7 +128,6 @@
         </x-slot>
 
     </x-forms.template>
-
 
     <!-- Modal -->
     <div class="modal fade" id="verPlanoModal"
@@ -105,5 +159,37 @@
 @endsection
 
 @push('js')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        const tipoProducto = '{{$tipoProducto}}';
+        
+        // Validación para equipos (no permitir Estante 1)
+        if (form && tipoProducto === 'equipo') {
+            form.addEventListener('submit', function(e) {
+                const ubicacionSelect = document.getElementById('ubicaciones_id');
+                if (ubicacionSelect) {
+                    const selectedOption = ubicacionSelect.options[ubicacionSelect.selectedIndex];
+                    if (selectedOption.textContent.includes('Estante 1')) {
+                        e.preventDefault();
+                        alert('Los equipos no pueden ubicarse en el Estante 1. Por favor seleccione otra ubicación.');
+                        ubicacionSelect.focus();
+                    }
+                }
+            });
+        }
 
+        // Para servicios, validar que el costo sea mayor a 0
+        if (tipoProducto === 'servicio') {
+            form.addEventListener('submit', function(e) {
+                const costoInput = document.getElementById('costo_unitario');
+                if (costoInput && (!costoInput.value || parseFloat(costoInput.value) <= 0)) {
+                    e.preventDefault();
+                    alert('El costo del servicio debe ser mayor a 0.');
+                    costoInput.focus();
+                }
+            });
+        }
+    });
+</script>
 @endpush

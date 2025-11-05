@@ -20,7 +20,7 @@ class Kardex extends Model
 
     public function producto(): BelongsTo
     {
-        return $this->belongsTo(Kardex::class);
+        return $this->belongsTo(Producto::class); // ✅ CORREGIDO
     }
 
     public function getFechaAttribute(): string
@@ -51,14 +51,16 @@ class Kardex extends Model
             ->latest('id')
             ->first();
 
-        $saldo = $ultimoRegistro ? $ultimoRegistro->saldo : $data['cantidad'];
-
-        if ($tipo == TipoTransaccionEnum::Compra) {
+        // Lógica corregida para APERTURA
+        if ($tipo == TipoTransaccionEnum::Apertura) {
             $entrada = $data['cantidad'];
-            $saldo += $entrada;
+            $saldo = $entrada; // En apertura, el saldo inicial es la cantidad
+        } elseif ($tipo == TipoTransaccionEnum::Compra) {
+            $entrada = $data['cantidad'];
+            $saldo = $ultimoRegistro ? $ultimoRegistro->saldo + $entrada : $entrada;
         } elseif ($tipo == TipoTransaccionEnum::Venta || $tipo == TipoTransaccionEnum::Ajuste) {
             $salida = $data['cantidad'];
-            $saldo -= $salida;
+            $saldo = $ultimoRegistro ? $ultimoRegistro->saldo - $salida : -$salida;
         }
 
         try {
@@ -69,10 +71,15 @@ class Kardex extends Model
                 'entrada' => $entrada,
                 'salida' => $salida,
                 'saldo' => $saldo,
-                'costo_unitario' => $data['costo_unitario'],
+                'costo_unitario' => $data['costo_unitario'] ?? 0, // ✅ Maneja null para equipos
             ]);
         } catch (Exception $e) {
-            Log::error('Error al crear un registro en el cardex', ['error' => $e->getMessage()]);
+            Log::error('Error al crear un registro en el kardex', [
+                'error' => $e->getMessage(),
+                'data' => $data,
+                'tipo' => $tipo->value
+            ]);
+            throw $e; // ✅ Relanza la excepción para que el controlador la capture
         }
     }
 
@@ -81,23 +88,13 @@ class Kardex extends Model
      */
     private function getDescripcionTransaccion(array $data, TipoTransaccionEnum $tipo): string
     {
-        $descripcion = '';
-        switch ($tipo) {
-            case TipoTransaccionEnum::Apertura:
-                $descripcion = 'Apertura del producto';
-                break;
-            case TipoTransaccionEnum::Compra:
-                $descripcion = 'Entrada de producto por la compra n°' . $data['compra_id'];
-                break;
-            case TipoTransaccionEnum::Venta:
-                $descripcion = 'Salida de producto por la venta n°' . $data['venta_id'];
-                break;
-            case TipoTransaccionEnum::Ajuste:
-                $descripcion = 'Ajuste de producto';
-                break;
-        }
-
-        return $descripcion;
+        return match ($tipo) {
+            TipoTransaccionEnum::Apertura => 'Apertura del producto',
+            TipoTransaccionEnum::Compra => 'Entrada de producto por la compra n°' . ($data['compra_id'] ?? 'N/A'),
+            TipoTransaccionEnum::Venta => 'Salida de producto por la venta n°' . ($data['venta_id'] ?? 'N/A'),
+            TipoTransaccionEnum::Ajuste => 'Ajuste de producto',
+            default => 'Transacción no especificada'
+        };
     }
 
     /**
@@ -105,11 +102,14 @@ class Kardex extends Model
      */
     public function calcularPrecioVenta(int $producto_id): float
     {
-        $costoUltimoRegistro = $this->where('producto_id', $producto_id)
+        $ultimoRegistro = $this->where('producto_id', $producto_id)
             ->latest('id')
-            ->first()
-            ->costo_unitario;
+            ->first();
 
-        return $costoUltimoRegistro + round($costoUltimoRegistro * self::MARGEN_GANANCIA, 2);
+        if (!$ultimoRegistro || !$ultimoRegistro->costo_unitario) {
+            return 0; // O algún valor por defecto
+        }
+
+        return $ultimoRegistro->costo_unitario + round($ultimoRegistro->costo_unitario * self::MARGEN_GANANCIA, 2);
     }
 }
