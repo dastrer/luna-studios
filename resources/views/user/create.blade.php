@@ -53,7 +53,7 @@
 
                 <!---Nombre---->
                 <div class="row mb-4">
-                    <label for="name" class="col-lg-2 col-form-label">Nombres:</label>
+                    <label for="name" class="col-lg-2 col-form-label">Alias:</label>
                     <div class="col-lg-4">
                         <input autocomplete="off" type="text" name="name"
                             id="name" class="form-control" value="{{old('name')}}"
@@ -61,7 +61,7 @@
                     </div>
                     <div class="col-lg-4">
                         <div class="form-text" id="nameHelpBlock">
-                            Escriba un solo nombre
+                            Escriba una sola palabra
                         </div>
                     </div>
                     <div class="col-lg-2">
